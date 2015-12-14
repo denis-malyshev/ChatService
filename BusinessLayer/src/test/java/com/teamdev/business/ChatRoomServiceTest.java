@@ -45,4 +45,14 @@ public class ChatRoomServiceTest {
         final int actual = chatRoomService.getRepository().findById(chatId).getUsers().size();
         assertEquals("Count of users must be 1", 1, actual);
     }
+
+    @Test
+    public void leaveFromChat() throws Exception {
+        long chatId = 0;
+        chatRoomService.register(new ChatRoom("first"));
+        chatRoomService.joinToChatRoom(token, 0L, chatId);
+        chatRoomService.leaveChatRoom(token, 0L, chatId);
+        final int actual = chatRoomService.getRepository().findById(chatId).getUsers().size();
+        assertEquals("Count of users must be 0", 0, actual);
+    }
 }
