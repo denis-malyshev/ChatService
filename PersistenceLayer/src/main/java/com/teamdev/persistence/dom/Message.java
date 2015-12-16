@@ -7,32 +7,25 @@ public final class Message {
     private long id;
     private LocalDateTime time;
     private String text;
-    private long senderId;
-    private long receiverId;
-    private long chatId;
+    private User sender;
+    private User receiver;
+    private ChatRoom chat;
 
     public Message() {
     }
 
-    public Message(String text, long senderId, long chatId) {
+    public Message(String text, User sender, User receiver) {
+        this.time = LocalDateTime.now();
         this.text = text;
-        this.senderId = senderId;
-        this.chatId = chatId;
+        this.sender = sender;
+        this.receiver = receiver;
     }
 
-    public Message(String text, long senderId, long receiverId, long chatId) {
+    public Message(String text, User sender, ChatRoom chat) {
+        this.time = LocalDateTime.now();
         this.text = text;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
-        this.chatId = chatId;
-    }
-
-    public long getReceiverId() {
-        return receiverId;
-    }
-
-    public void setReceiverId(long receiverId) {
-        this.receiverId = receiverId;
+        this.sender = sender;
+        this.chat = chat;
     }
 
     public long getId() {
@@ -59,20 +52,28 @@ public final class Message {
         this.text = text;
     }
 
-    public long getSenderId() {
-        return senderId;
+    public User getSender() {
+        return sender;
     }
 
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public long getChatId() {
-        return chatId;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setChatId(long chatId) {
-        this.chatId = chatId;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    public ChatRoom getChat() {
+        return chat;
+    }
+
+    public void setChat(ChatRoom chat) {
+        this.chat = chat;
     }
 
     @Override
@@ -94,11 +95,8 @@ public final class Message {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Message{");
-        sb.append("id=").append(id);
-        sb.append(", time=").append(time);
+        sb.append("time=").append(time);
         sb.append(", text='").append(text).append('\'');
-        sb.append(", senderId=").append(senderId);
-        sb.append(", chatId=").append(chatId);
         sb.append('}');
         return sb.toString();
     }

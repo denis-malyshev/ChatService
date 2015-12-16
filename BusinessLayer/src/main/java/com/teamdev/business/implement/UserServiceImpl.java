@@ -11,31 +11,25 @@ public class UserServiceImpl implements UserService<User, AuthenticationToken> {
 
     private UserRepository userRepository;
     private MessageRepository messageRepositoryImpl;
-    private AuthenticationServiceImpl authenticationService = new AuthenticationServiceImpl();
+    private AuthenticationServiceImpl authenticationService;
     private long count = 0;
 
-    public UserServiceImpl(UserRepository userRepository, MessageRepository messageRepositoryImpl) {
+    public UserServiceImpl(UserRepository userRepository, MessageRepository messageRepositoryImpl, AuthenticationServiceImpl authenticationService) {
         this.userRepository = userRepository;
         this.messageRepositoryImpl = messageRepositoryImpl;
+        this.authenticationService = authenticationService;
     }
 
-    public boolean register(User user) {
+    public void register(User user) {
         user.setId(count++);
         userRepository.update(user);
-        return true;
     }
 
-    public AuthenticationToken login(String userMail, long userId) {
-        final AuthenticationToken token = authenticationService.generateToken(userId);
-        userRepository.findById(userId).setTokenId(token.getId());
-        return token;
-    }
+    public void sendPrivateMessage(AuthenticationToken token, String text, User sender, User receiver) throws Exception {
 
-    public void sendPrivateMessage(AuthenticationToken token, String text, long senderId, long receiverId) {
-        if (!authenticationService.isValid(token)) {
-        }
+        authenticationService.isValid(token);
 
-        final Message message = new Message(text, senderId, receiverId);
+        final Message message = new Message(text, sender, receiver);
         messageRepositoryImpl.update(message);
     }
 

@@ -12,7 +12,7 @@ public final class User {
     private String firstName;
     private String password;
     private String mail;
-    private long tokenId;
+    private AuthenticationToken token;
 
     private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
 
@@ -31,12 +31,12 @@ public final class User {
         this.mail = mail;
     }
 
-    public long getTokenId() {
-        return tokenId;
+    public AuthenticationToken getToken() {
+        return token;
     }
 
-    public void setTokenId(long tokenId) {
-        this.tokenId = tokenId;
+    public void setToken(AuthenticationToken token) {
+        this.token = token;
     }
 
     public long getId() {

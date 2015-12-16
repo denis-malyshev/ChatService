@@ -1,10 +1,9 @@
 package com.teamdev.persistence.repository;
 
 import com.teamdev.persistence.dom.User;
+import com.teamdev.persistence.exception.EntityNotFoundException;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -13,8 +12,21 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl() {
     }
 
-    public User findById(long id) {
+    public User findById(long id) throws EntityNotFoundException {
+        if (!users.containsKey(id)) {
+            throw new EntityNotFoundException("No such user with id [ "+id+ "]");
+        }
         return users.get(id);
+    }
+
+    public User findByMail(String mail) {
+        Iterator<User> iterator = getUsers().iterator();
+        while (iterator.hasNext()) {
+            User user = iterator.next();
+            if (user.getMail().equals(mail))
+                return user;
+        }
+        return null;
     }
 
     public Collection<User> findAll() {
@@ -29,7 +41,7 @@ public class UserRepositoryImpl implements UserRepository {
         users.remove(id);
     }
 
-    public Map<Long, User> getUsers() {
-        return users;
+    public Collection<User> getUsers() {
+        return users.values();
     }
 }

@@ -7,6 +7,7 @@ public class AuthenticationToken {
     private long id;
     private LocalDateTime expirationTime;
     private long userId;
+    private String key;
 
     public AuthenticationToken() {
     }
@@ -14,6 +15,7 @@ public class AuthenticationToken {
     public AuthenticationToken(long userId) {
         this.expirationTime = LocalDateTime.now().plusMinutes(15l);
         this.userId = userId;
+        this.key = System.nanoTime() * Math.random() + "";
     }
 
     public long getId() {
@@ -38,6 +40,10 @@ public class AuthenticationToken {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     @Override
