@@ -1,5 +1,8 @@
 package com.teamdev.persistence.dom;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,14 +14,20 @@ public final class User {
     private String mail;
     private long tokenId;
 
-    private Set<Long> chatRooms = new HashSet<Long>();
+    private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
 
     public User() {
     }
 
     public User(String firstName, String password, String mail) {
         this.firstName = firstName;
-        this.password = password;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(password.getBytes(), 0, password.length());
+            this.password = new BigInteger(1, md5.digest()).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         this.mail = mail;
     }
 
@@ -51,7 +60,13 @@ public final class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            md5.update(password.getBytes(), 0, password.length());
+            this.password = new BigInteger(1, md5.digest()).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getMail() {
@@ -62,11 +77,11 @@ public final class User {
         this.mail = mail;
     }
 
-    public Set<Long> getChatRooms() {
+    public Set<ChatRoom> getChatRooms() {
         return chatRooms;
     }
 
-    public void setChatRooms(Set<Long> chatRooms) {
+    public void setChatRooms(Set<ChatRoom> chatRooms) {
         this.chatRooms = chatRooms;
     }
 
@@ -83,7 +98,9 @@ public final class User {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + firstName.hashCode();
+        return result;
     }
 
     @Override

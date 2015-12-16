@@ -9,39 +9,38 @@ import com.teamdev.persistence.repository.UserRepository;
 
 public class UserServiceImpl implements UserService<User, AuthenticationToken> {
 
-    private UserRepository repository = new UserRepository();
-    private MessageRepository messageRepository;
+    private UserRepository userRepository;
+    private MessageRepository messageRepositoryImpl;
     private AuthenticationServiceImpl authenticationService = new AuthenticationServiceImpl();
     private long count = 0;
 
-    public UserServiceImpl(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
-
+    public UserServiceImpl(UserRepository userRepository, MessageRepository messageRepositoryImpl) {
+        this.userRepository = userRepository;
+        this.messageRepositoryImpl = messageRepositoryImpl;
     }
 
     public boolean register(User user) {
         user.setId(count++);
-        repository.update(user);
+        userRepository.update(user);
         return true;
     }
 
     public AuthenticationToken login(String userMail, long userId) {
         final AuthenticationToken token = authenticationService.generateToken(userId);
-        repository.findById(userId).setTokenId(token.getId());
+        userRepository.findById(userId).setTokenId(token.getId());
         return token;
     }
 
     public void sendPrivateMessage(AuthenticationToken token, String text, long senderId, long receiverId) {
         if (!authenticationService.isValid(token)) {
-
         }
 
         final Message message = new Message(text, senderId, receiverId);
-        messageRepository.update(message);
+        messageRepositoryImpl.update(message);
     }
 
-    public UserRepository getRepository() {
-        return repository;
+    public UserRepository getUserRepository() {
+        return userRepository;
     }
 
 }

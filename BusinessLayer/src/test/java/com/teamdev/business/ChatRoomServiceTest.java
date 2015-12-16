@@ -3,7 +3,7 @@ package com.teamdev.business;
 import com.teamdev.business.implement.ChatRoomServiceImpl;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
-import com.teamdev.persistence.repository.MessageRepository;
+import com.teamdev.persistence.repository.MessageRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class ChatRoomServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        chatRoomService = new ChatRoomServiceImpl(new MessageRepository());
+        chatRoomService = new ChatRoomServiceImpl(new MessageRepositoryImpl());
         token = new AuthenticationToken(0L);
     }
 
