@@ -1,27 +1,48 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.UserServiceImpl;
+import com.teamdev.business.implement.model.ChatService;
+import com.teamdev.persistence.dom.AuthenticationToken;
+import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.repository.MessageRepositoryImpl;
+import com.teamdev.persistence.repository.RepositoryFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class UserServiceTest {
 
-    private UserServiceImpl userService;
+    RepositoryFactory repositoryFactory = new RepositoryFactory();
+    ChatService service = new ChatService(repositoryFactory);
+    AuthenticationToken token;
+    ChatRoom chatRoom;
 
-//    @Before
-//    public void setUp() throws Exception {
-//        userService = new UserServiceImpl(new MessageRepositoryImpl());
-//    }
-//
-//    @Test
-//    public void registerFirstUser() throws Exception {
-//        final User user = new User("Vasya", "234", "vasya@gmail.com");
-//        userService.register(user);
-//        final int actual = userService.getUserRepository().getUsers().size();
-//        assertEquals("The number of users should be 1",1, actual);
-//    }
+    @Before
+    public void setUp() throws Exception {
+        token = new AuthenticationToken(0L);
+        repositoryFactory.getTokenRepository().update(token);
+        chatRoom = new ChatRoom("freeRoom");
+        service.chatRoomService.register(chatRoom);
+    }
+
+    @Test
+    public void registerFirstUser() throws Exception {
+        User user = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+        service.userService.register(user);
+        User actual = repositoryFactory.getUserRepository().findById(user.getId());
+        assertNotNull("The user must exist", actual);
+    }
+
+    @Test
+    public void sendPrivateMessage() throws Exception {
+        User sender = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+        User recipient = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+        service.userService.register(sender);
+        service.userService.register(recipient);
+        service.userService.sendPrivateMessage(token, "Hello", sender, recipient);
+        //ТАК НЕЛЬЗЯ, НО ПОКА ТАК...
+        int actual = repositoryFactory.getMessageRepository().findAll().size();
+        assertEquals("Count of message must be 1", 1, actual);
+    }
 }

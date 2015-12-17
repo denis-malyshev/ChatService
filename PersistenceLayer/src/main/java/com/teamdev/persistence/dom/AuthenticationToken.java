@@ -15,7 +15,7 @@ public class AuthenticationToken {
     public AuthenticationToken(long userId) {
         this.expirationTime = LocalDateTime.now().plusMinutes(15l);
         this.userId = userId;
-        this.key = System.nanoTime() * Math.random() + "";
+        this.key = (System.nanoTime() * Math.random() + userId) + "";
     }
 
     public long getId() {
@@ -40,6 +40,10 @@ public class AuthenticationToken {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getKey() {

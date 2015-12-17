@@ -13,6 +13,7 @@ public final class User {
     private String password;
     private String mail;
     private AuthenticationToken token;
+    private Set<Message> messages = new HashSet<Message>();
 
     private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
 
@@ -37,6 +38,14 @@ public final class User {
 
     public void setToken(AuthenticationToken token) {
         this.token = token;
+    }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
     }
 
     public long getId() {

@@ -1,22 +1,27 @@
 package com.teamdev.business.implement;
 
+import com.teamdev.business.AuthenticationService;
+import com.teamdev.business.MessageService;
 import com.teamdev.business.UserService;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.MessageRepository;
+import com.teamdev.persistence.repository.RepositoryFactory;
 import com.teamdev.persistence.repository.UserRepository;
 
 public class UserServiceImpl implements UserService<User, AuthenticationToken> {
 
     private UserRepository userRepository;
     private MessageRepository messageRepositoryImpl;
-    private AuthenticationServiceImpl authenticationService;
+    private AuthenticationService authenticationService;
+    private MessageService messageService;
     private long count = 0;
 
-    public UserServiceImpl(UserRepository userRepository, MessageRepository messageRepositoryImpl, AuthenticationServiceImpl authenticationService) {
-        this.userRepository = userRepository;
-        this.messageRepositoryImpl = messageRepositoryImpl;
+    public UserServiceImpl(RepositoryFactory repositoryFactory, AuthenticationService authenticationService, MessageService messageService) {
+        this.messageService = messageService;
+        this.userRepository = repositoryFactory.getUserRepository();
+        this.messageRepositoryImpl = repositoryFactory.getMessageRepository();
         this.authenticationService = authenticationService;
     }
 
@@ -30,11 +35,10 @@ public class UserServiceImpl implements UserService<User, AuthenticationToken> {
         authenticationService.isValid(token);
 
         final Message message = new Message(text, sender, receiver);
-        messageRepositoryImpl.update(message);
-    }
 
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
+        messageService.register(message);
 
+        sender.getMessages().add(message);
+        receiver.getMessages().add(message);
+    }
 }

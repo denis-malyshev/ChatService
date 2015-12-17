@@ -10,6 +10,6 @@ public interface ChatRoomService<ChatRoom, AuthenticationToken> {
 
     void sendMessage(AuthenticationToken token, String text, User user, ChatRoom chatRoomId) throws Exception;
 
-    void leaveChatRoom(AuthenticationToken token, long userId, long chatRoomId) throws Exception;
+    void leaveChatRoom(AuthenticationToken token, User user, long chatRoomId) throws Exception;
 
 }

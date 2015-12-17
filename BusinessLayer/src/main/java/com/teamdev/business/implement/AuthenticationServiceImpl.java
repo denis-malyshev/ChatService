@@ -21,21 +21,13 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
         this.userRepository = userRepository;
     }
 
-    public AuthenticationToken login(String userMail, String password) throws EntityNotFoundException {
+    public void login(String userMail, String password) throws EntityNotFoundException {
         User user = userRepository.findByMail(userMail);
         AuthenticationToken token = generateToken(user.getId());
         user.setToken(token);
-        return token;
     }
 
-    public AuthenticationToken generateToken(long userId) {
-        AuthenticationToken token = new AuthenticationToken(userId);
-        token.setId(count++);
-        tokenRepository.update(token);
-        return token;
-    }
-
-    public boolean isValid(AuthenticationToken token) throws Exception {
+    public boolean isValid(AuthenticationToken token) throws AuthenticationError, EntityNotFoundException {
         AuthenticationToken innerToken = tokenRepository.findById(token.getId());
         if (!innerToken.getKey().equals(token.getKey())) {
             throw new AuthenticationError("Invalid token key.");
@@ -44,5 +36,16 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
             throw new AuthenticationError("Token has been expired.");
         }
         return true;
+    }
+
+    public AuthenticationTokenRepository getTokenRepository() {
+        return tokenRepository;
+    }
+
+    private AuthenticationToken generateToken(long userId) {
+        AuthenticationToken token = new AuthenticationToken(userId);
+        token.setId(count++);
+        tokenRepository.update(token);
+        return token;
     }
 }

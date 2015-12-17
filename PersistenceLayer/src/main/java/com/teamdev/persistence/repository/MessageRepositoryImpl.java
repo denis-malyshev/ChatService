@@ -1,8 +1,10 @@
 package com.teamdev.persistence.repository;
 
 import com.teamdev.persistence.dom.Message;
+import com.teamdev.persistence.dom.User;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +22,10 @@ public class MessageRepositoryImpl implements MessageRepository {
 
     public void update(Message message) {
         messages.put(message.getId(), message);
+    }
+
+    public Collection<Message> findBySender(User sender) {
+        return Collections.emptySet();
     }
 
     public void delete(long id) {
