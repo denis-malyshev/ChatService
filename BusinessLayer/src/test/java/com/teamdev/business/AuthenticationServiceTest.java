@@ -9,23 +9,30 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AuthenticationServiceTest {
 
     private ChatService service;
+    RepositoryFactory repositoryFactory;
+
 
     @Before
     public void setUp() throws Exception {
-        RepositoryFactory repositoryFactory = new RepositoryFactory();
+        repositoryFactory = new RepositoryFactory();
         service = new ChatService(repositoryFactory);
-        service.userService.register(new User("vasya","vasya@gmail.com","asd123"));
+        service.userService.register(new User("vasya", "vasya@gmail.com", "asd123"));
     }
 
     @Test
     public void loginUserTest() throws Exception {
-        service.authenticationService.login("vasya@gmail.com","asd123");
+        int before = repositoryFactory.getTokenRepository().count();
+        service.authenticationService.login("vasya@gmail.com", "asd123");
+        int after = repositoryFactory.getTokenRepository().count();
+        int result = after - before;
+        assertEquals("", 1, result);
     }
 
     @Test

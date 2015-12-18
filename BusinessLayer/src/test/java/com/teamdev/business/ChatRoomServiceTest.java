@@ -33,7 +33,7 @@ public class ChatRoomServiceTest {
     }
 
     @Test
-    public void registerChat() throws Exception {
+    public void createChat() throws Exception {
         ChatRoom chat = new ChatRoom("testChat");
         service.chatRoomService.create(chat);
         ChatRoom chatRoom = repositoryFactory.getChatRoomRepository().findById(chat.getId());

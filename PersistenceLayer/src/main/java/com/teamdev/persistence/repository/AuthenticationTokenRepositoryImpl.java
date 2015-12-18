@@ -21,6 +21,11 @@ public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRep
         return tokens.values();
     }
 
+    @Override
+    public int count() {
+        return tokens.size();
+    }
+
     public void update(AuthenticationToken token) {
         tokens.put(token.getId(), token);
     }
