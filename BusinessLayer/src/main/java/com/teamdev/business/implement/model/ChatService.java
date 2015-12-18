@@ -29,16 +29,6 @@ public class ChatService {
     }
 
     public static void main(String[] args) throws Exception {
-        RepositoryFactory repositoryFactory = new RepositoryFactory();
-        ChatService service = new ChatService(repositoryFactory);
-        AuthenticationToken token = new AuthenticationToken(0L);
-        repositoryFactory.getTokenRepository().update(token);
-        User user1 = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
-        User user2 = new User("Masha", "pwd123", "masha@gmail.com");
-        repositoryFactory.getUserRepository().update(user1);
-        repositoryFactory.getUserRepository().update(user2);
-        ChatRoom chatRoom = new ChatRoom("freeRoom");
-        service.chatRoomService.create(chatRoom);
-        service.chatRoomService.sendMessage(token, "Hello", user1.getId(), chatRoom.getId());
+
     }
 }

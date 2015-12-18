@@ -24,8 +24,8 @@ public class ChatRoomServiceTest {
     public void setUp() throws Exception {
         token = new AuthenticationToken(0L);
         repositoryFactory.getTokenRepository().update(token);
-        user1 = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
-        user2 = new User("Masha", "pwd123", "masha@gmail.com");
+        user1 = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
+        user2 = new User("Masha", "masha@gmail.com", "pwd123");
         repositoryFactory.getUserRepository().update(user1);
         repositoryFactory.getUserRepository().update(user2);
         chatRoom = new ChatRoom("freeRoom");
@@ -56,7 +56,7 @@ public class ChatRoomServiceTest {
 
     @Test
     public void leaveFromChat() throws Exception {
-        service.chatRoomService.joinToChatRoom(token, user1.getId(), chatRoom.getId());
+        joinUserToChat();
         service.chatRoomService.leaveChatRoom(token, user1.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 0", 0, actual);

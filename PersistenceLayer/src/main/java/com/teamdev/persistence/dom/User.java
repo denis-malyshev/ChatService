@@ -1,8 +1,5 @@
 package com.teamdev.persistence.dom;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,13 +63,7 @@ public final class User {
     }
 
     public void setPassword(String password) {
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(password.getBytes(), 0, password.length());
-            this.password = new BigInteger(1, md5.digest()).toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        this.password = password;
     }
 
     public String getMail() {

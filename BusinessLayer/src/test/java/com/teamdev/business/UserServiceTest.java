@@ -14,13 +14,15 @@ import static org.junit.Assert.assertNotNull;
 
 public class UserServiceTest {
 
-    RepositoryFactory repositoryFactory = new RepositoryFactory();
-    ChatService service = new ChatService(repositoryFactory);
+    RepositoryFactory repositoryFactory;
+    ChatService service;
     AuthenticationToken token;
     ChatRoom chatRoom;
 
     @Before
     public void setUp() throws Exception {
+        repositoryFactory = new RepositoryFactory();
+        service = new ChatService(repositoryFactory);
         token = new AuthenticationToken(0L);
         repositoryFactory.getTokenRepository().update(token);
         chatRoom = new ChatRoom("freeRoom");
@@ -28,8 +30,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void registerFirstUser() throws Exception {
-        User user = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+    public void registerUser() throws Exception {
+        User user = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
         service.userService.register(user);
         User actual = repositoryFactory.getUserRepository().findById(user.getId());
         assertNotNull("The user must exist", actual);
@@ -38,8 +40,8 @@ public class UserServiceTest {
     @Test
     public void sendPrivateMessage() throws AuthenticationError {
 
-        User sender = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
-        User recipient = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+        User sender = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
+        User recipient = new User("Petya", "petya@gmail.com", "pa$$vv0rd");
 
         service.userService.register(sender);
         service.userService.register(recipient);

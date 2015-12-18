@@ -1,12 +1,8 @@
 package com.teamdev.persistence.repository;
 
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.exception.EntityNotFoundException;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -20,13 +16,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public User findByMail(String mail) {
-        Iterator<User> iterator = getUsers().iterator();
-        while (iterator.hasNext()) {
-            User user = iterator.next();
-            if (user.getMail().equals(mail))
-                return user;
-        }
-        return null;
+        User user = users.values().stream().filter(x -> x.getMail().equals(mail)).findFirst().orElse(null);
+        return user;
     }
 
     public Collection<User> findAll() {

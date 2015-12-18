@@ -25,7 +25,10 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
         this.authenticationService = authenticationService;
     }
 
-    public void register(User user) {
+    public void register(User user) throws AuthenticationError {
+        if (userRepository.findByMail(user.getMail()) != null) {
+            throw new AuthenticationError("User with the same mail already exists.");
+        }
         user.setId(count++);
         userRepository.update(user);
     }
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
         User sender = userRepository.findById(senderId);
         User receiver = userRepository.findById(receiverID);
 
-        final Message message = new Message(text, sender, receiver);
+        Message message = new Message(text, sender, receiver);
 
         messageService.register(message);
 

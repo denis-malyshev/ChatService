@@ -16,22 +16,21 @@ import static org.junit.Assert.fail;
 
 public class ExceptionTest {
 
-    RepositoryFactory repositoryFactory = new RepositoryFactory();
-    ChatService service = new ChatService(repositoryFactory);
+    RepositoryFactory repositoryFactory;
+    ChatService service;
     AuthenticationToken validToken;
     AuthenticationToken invalidToken = new AuthenticationToken(1L);
     ChatRoom chatRoom;
-    User user1;
-    User user2;
+    User user;
 
     @Before
     public void setUp() throws Exception {
+        repositoryFactory = new RepositoryFactory();
+        service = new ChatService(repositoryFactory);
         validToken = new AuthenticationToken(0L);
         repositoryFactory.getTokenRepository().update(validToken);
-        user1 = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
-        user2 = new User("Masha", "pwd123", "masha@gmail.com");
-        repositoryFactory.getUserRepository().update(user1);
-        repositoryFactory.getUserRepository().update(user2);
+        user = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+        service.userService.register(user);
         chatRoom = new ChatRoom("freeRoom");
         service.chatRoomService.create(chatRoom);
     }
@@ -53,8 +52,18 @@ public class ExceptionTest {
         try {
             service.authenticationService.isValid(invalidToken);
             fail();
-        } catch (Exception e) {
+        } catch (AuthenticationError e) {
             assertEquals("Token has been expired.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void errorMessageForRegisterUserWithExistingMail() {
+        try {
+            service.userService.register(user);
+            fail();
+        } catch (AuthenticationError e) {
+            assertEquals("User with the same mail already exists.", e.getMessage());
         }
     }
 
