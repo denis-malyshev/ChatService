@@ -4,7 +4,6 @@ import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.exception.EntityNotFoundException;
 import com.teamdev.persistence.repository.AuthenticationTokenRepository;
 import com.teamdev.persistence.repository.UserRepository;
 
@@ -21,13 +20,16 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
         this.userRepository = userRepository;
     }
 
-    public void login(String userMail, String password) throws EntityNotFoundException {
+    public void login(String userMail, String password) throws AuthenticationError {
         User user = userRepository.findByMail(userMail);
+        if (!user.getPassword().equals(password)) {
+            throw new AuthenticationError("Invalid login or password.");
+        }
         AuthenticationToken token = generateToken(user.getId());
         user.setToken(token);
     }
 
-    public boolean isValid(AuthenticationToken token) throws AuthenticationError, EntityNotFoundException {
+    public boolean isValid(AuthenticationToken token) throws AuthenticationError {
         AuthenticationToken innerToken = tokenRepository.findById(token.getId());
         if (!innerToken.getKey().equals(token.getKey())) {
             throw new AuthenticationError("Invalid token key.");

@@ -1,8 +1,11 @@
 package com.teamdev.business;
 
-public interface UserService<User, AuthenticationToken> {
+import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.persistence.dom.User;
+
+public interface UserService<AuthenticationToken> {
 
     void register(User user);
 
-    void sendPrivateMessage(AuthenticationToken token, String text, User sender, User receiver) throws Exception;
+    void sendPrivateMessage(AuthenticationToken token, String text, long senderId, long receiverId) throws AuthenticationError;
 }

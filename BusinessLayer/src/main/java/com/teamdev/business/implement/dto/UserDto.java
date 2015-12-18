@@ -2,14 +2,24 @@ package com.teamdev.business.implement.dto;
 
 public class UserDto {
 
+    private long id;
     private String firstName;
     private String mail;
     private String birthday;
 
-    public UserDto(String firstName, String mail, String birthday) {
+    public UserDto(long id, String firstName, String mail, String birthday) {
+        this.id = id;
         this.firstName = firstName;
         this.mail = mail;
         this.birthday = birthday;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

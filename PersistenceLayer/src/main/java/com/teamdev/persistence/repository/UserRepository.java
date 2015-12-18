@@ -6,5 +6,7 @@ import com.teamdev.persistence.exception.EntityNotFoundException;
 
 public interface UserRepository extends Repository<User> {
 
-    User findByMail(String mail) throws EntityNotFoundException;
+    User findByMail(String mail);
+
+    int count();
 }

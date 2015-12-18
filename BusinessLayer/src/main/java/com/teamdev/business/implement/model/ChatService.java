@@ -38,7 +38,7 @@ public class ChatService {
         repositoryFactory.getUserRepository().update(user1);
         repositoryFactory.getUserRepository().update(user2);
         ChatRoom chatRoom = new ChatRoom("freeRoom");
-        service.chatRoomService.register(chatRoom);
-        service.chatRoomService.sendMessage(token, "Hello", user1, chatRoom);
+        service.chatRoomService.create(chatRoom);
+        service.chatRoomService.sendMessage(token, "Hello", user1.getId(), chatRoom.getId());
     }
 }

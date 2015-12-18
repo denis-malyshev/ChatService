@@ -1,15 +1,16 @@
 package com.teamdev.business;
 
-import com.teamdev.persistence.dom.User;
+import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.persistence.dom.ChatRoom;
 
-public interface ChatRoomService<ChatRoom, AuthenticationToken> {
+public interface ChatRoomService<AuthenticationToken> {
 
-    boolean register(ChatRoom chatRoom);
+    boolean create(ChatRoom chatRoom);
 
-    void joinToChatRoom(AuthenticationToken token, User user, long chatRoomId) throws Exception;
+    void joinToChatRoom(AuthenticationToken token, long user, long chatRoomId) throws AuthenticationError;
 
-    void sendMessage(AuthenticationToken token, String text, User user, ChatRoom chatRoomId) throws Exception;
+    void sendMessage(AuthenticationToken token, String text, long user, long chatRoomId) throws AuthenticationError;
 
-    void leaveChatRoom(AuthenticationToken token, User user, long chatRoomId) throws Exception;
+    void leaveChatRoom(AuthenticationToken token, long user, long chatRoomId) throws AuthenticationError;
 
 }

@@ -3,7 +3,10 @@ package com.teamdev.persistence.repository;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.exception.EntityNotFoundException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -12,10 +15,7 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl() {
     }
 
-    public User findById(long id) throws EntityNotFoundException {
-        if (!users.containsKey(id)) {
-            throw new EntityNotFoundException("No such user with id [ "+id+ "]");
-        }
+    public User findById(long id) {
         return users.get(id);
     }
 
@@ -31,6 +31,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     public Collection<User> findAll() {
         return users.values();
+    }
+
+    public int count() {
+        return users.size();
     }
 
     public void update(User user) {

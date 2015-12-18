@@ -22,4 +22,5 @@ public final class RepositoryFactory {
     public AuthenticationTokenRepository getTokenRepository() {
         return tokenRepository;
     }
+
 }

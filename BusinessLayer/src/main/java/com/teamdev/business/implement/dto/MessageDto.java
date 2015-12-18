@@ -4,12 +4,22 @@ import java.time.LocalDateTime;
 
 public class MessageDto {
 
+    private long id;
     private String text;
     private LocalDateTime time;
 
-    public MessageDto(String text, LocalDateTime time) {
+    public MessageDto(long id, String text, LocalDateTime time) {
+        this.id = id;
         this.text = text;
         this.time = time;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getText() {

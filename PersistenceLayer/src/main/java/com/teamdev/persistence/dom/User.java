@@ -3,33 +3,30 @@ package com.teamdev.persistence.dom;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public final class User {
 
     private long id;
     private String firstName;
-    private String password;
     private String mail;
+    private String password;
+
     private AuthenticationToken token;
-    private Set<Message> messages = new HashSet<Message>();
+    private List<Message> messages = new ArrayList<>();
 
     private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
 
     public User() {
     }
 
-    public User(String firstName, String password, String mail) {
+    public User(String firstName, String mail, String password) {
         this.firstName = firstName;
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(password.getBytes(), 0, password.length());
-            this.password = new BigInteger(1, md5.digest()).toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
         this.mail = mail;
+        this.password = password;
     }
 
     public AuthenticationToken getToken() {
@@ -40,11 +37,11 @@ public final class User {
         this.token = token;
     }
 
-    public Set<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(Set<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
