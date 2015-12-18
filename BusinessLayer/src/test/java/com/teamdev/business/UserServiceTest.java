@@ -1,5 +1,6 @@
 package com.teamdev.business;
 
+import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.business.implement.model.ChatService;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
@@ -23,7 +24,7 @@ public class UserServiceTest {
         token = new AuthenticationToken(0L);
         repositoryFactory.getTokenRepository().update(token);
         chatRoom = new ChatRoom("freeRoom");
-        service.chatRoomService.register(chatRoom);
+        service.chatRoomService.create(chatRoom);
     }
 
     @Test
@@ -35,14 +36,16 @@ public class UserServiceTest {
     }
 
     @Test
-    public void sendPrivateMessage() throws Exception {
+    public void sendPrivateMessage() throws AuthenticationError {
+
         User sender = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
         User recipient = new User("Vasya", "pa$$vv0rd", "vasya@gmail.com");
+
         service.userService.register(sender);
         service.userService.register(recipient);
-        service.userService.sendPrivateMessage(token, "Hello", sender, recipient);
-        //ТАК НЕЛЬЗЯ, НО ПОКА ТАК...
-        int actual = repositoryFactory.getMessageRepository().findAll().size();
+        service.userService.sendPrivateMessage(token, "Hello", sender.getId(), recipient.getId());
+
+        int actual = repositoryFactory.getMessageRepository().count();
         assertEquals("Count of message must be 1", 1, actual);
     }
 }

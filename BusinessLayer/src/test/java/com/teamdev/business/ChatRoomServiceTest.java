@@ -29,35 +29,35 @@ public class ChatRoomServiceTest {
         repositoryFactory.getUserRepository().update(user1);
         repositoryFactory.getUserRepository().update(user2);
         chatRoom = new ChatRoom("freeRoom");
-        service.chatRoomService.register(chatRoom);
+        service.chatRoomService.create(chatRoom);
     }
 
     @Test
     public void registerChat() throws Exception {
         ChatRoom chat = new ChatRoom("testChat");
-        service.chatRoomService.register(chat);
+        service.chatRoomService.create(chat);
         ChatRoom chatRoom = repositoryFactory.getChatRoomRepository().findById(chat.getId());
         assertNotNull(chatRoom);
     }
 
     @Test
     public void sendMessageToChat() throws Exception {
-        service.chatRoomService.sendMessage(token, "Hello", user1, chatRoom);
+        service.chatRoomService.sendMessage(token, "Hello", user1.getId(), chatRoom.getId());
         int actual = chatRoom.getMessages().size();
         assertEquals("Count of messages must be 1", 1, actual);
     }
 
     @Test
     public void joinUserToChat() throws Exception {
-        service.chatRoomService.joinToChatRoom(token, user1, chatRoom.getId());
+        service.chatRoomService.joinToChatRoom(token, user1.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 1", 1, actual);
     }
 
     @Test
     public void leaveFromChat() throws Exception {
-        service.chatRoomService.joinToChatRoom(token, user1, chatRoom.getId());
-        service.chatRoomService.leaveChatRoom(token, user1, chatRoom.getId());
+        service.chatRoomService.joinToChatRoom(token, user1.getId(), chatRoom.getId());
+        service.chatRoomService.leaveChatRoom(token, user1.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 0", 0, actual);
     }
