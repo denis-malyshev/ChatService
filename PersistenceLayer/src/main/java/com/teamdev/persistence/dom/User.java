@@ -1,13 +1,19 @@
 package com.teamdev.persistence.dom;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "users")
 public final class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String firstName;
     private String mail;
     private String password;

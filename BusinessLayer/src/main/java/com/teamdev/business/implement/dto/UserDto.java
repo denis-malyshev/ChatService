@@ -1,5 +1,8 @@
 package com.teamdev.business.implement.dto;
 
+import javax.persistence.Entity;
+
+@Entity
 public class UserDto {
 
     private long id;

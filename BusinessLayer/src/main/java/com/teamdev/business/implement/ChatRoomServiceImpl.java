@@ -9,10 +9,15 @@ import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.ChatRoomRepository;
 import com.teamdev.persistence.repository.RepositoryFactory;
 import com.teamdev.persistence.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken> {
 
+    @Autowired
     private ChatRoomRepository repository;
+    @Autowired
     private UserRepository userRepository;
     private MessageServiceImpl messageService;
     private AuthenticationServiceImpl authenticationService;

@@ -10,9 +10,13 @@ import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.MessageRepository;
 import com.teamdev.persistence.repository.RepositoryFactory;
 import com.teamdev.persistence.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService<AuthenticationToken> {
 
+    @Autowired
     private UserRepository userRepository;
     private AuthenticationService authenticationService;
     private MessageService messageService;

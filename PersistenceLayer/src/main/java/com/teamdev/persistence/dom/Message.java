@@ -1,10 +1,16 @@
 package com.teamdev.persistence.dom;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table
 public final class Message {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private LocalDateTime time;
     private String text;
     private User sender;

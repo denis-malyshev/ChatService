@@ -5,14 +5,14 @@ import com.teamdev.business.implement.AuthenticationServiceImpl;
 import com.teamdev.business.implement.ChatRoomServiceImpl;
 import com.teamdev.business.implement.MessageServiceImpl;
 import com.teamdev.business.implement.UserServiceImpl;
-import com.teamdev.persistence.dom.AuthenticationToken;
-import com.teamdev.persistence.dom.ChatRoom;
-import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ChatService {
+
+    private static final Logger logger = Logger.getLogger(ChatService.class);
 
     private final RepositoryFactory repositoryFactory;
 
@@ -32,7 +32,7 @@ public class ChatService {
 
     public static void main(String[] args) throws Exception {
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("");
-
+        ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/beans.xml");
+        ChatService service = (ChatService) context.getBean("");
     }
 }

@@ -7,6 +7,8 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <org.springframework.version>4.0.5.RELEASE</org.springframework.version>
+        <org.hibernate.version>4.3.5.Final</org.hibernate.version>
     </properties>
 
     <groupId>com.teamdev.business</groupId>
@@ -15,19 +17,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.teamdev.persistence</groupId>
-            <artifactId>persistence</artifactId>
+            <groupId>com.teamdev.chatservice</groupId>
+            <artifactId>chatroom-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <groupId>com.teamdev.persistence</groupId>
+            <artifactId>persistence</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

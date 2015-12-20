@@ -1,10 +1,16 @@
 package com.teamdev.persistence.dom;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table
 public class AuthenticationToken {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private LocalDateTime expirationTime;
     private long userId;
     private String key;
