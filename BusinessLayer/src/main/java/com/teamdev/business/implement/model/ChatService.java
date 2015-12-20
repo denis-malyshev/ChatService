@@ -9,6 +9,8 @@ import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ChatService {
 
@@ -29,6 +31,8 @@ public class ChatService {
     }
 
     public static void main(String[] args) throws Exception {
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("");
 
     }
 }
