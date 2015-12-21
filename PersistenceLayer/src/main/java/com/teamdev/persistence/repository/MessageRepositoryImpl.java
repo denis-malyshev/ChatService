@@ -1,5 +1,6 @@
 package com.teamdev.persistence.repository;
 
+import com.teamdev.persistence.MessageRepository;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Map<Long, Message> messages = new HashMap<Long, Message>();
+    private Map<Long, Message> messages = new HashMap<>();
 
     public Message findById(long id) {
         return messages.get(id);

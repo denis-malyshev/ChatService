@@ -1,5 +1,6 @@
 package com.teamdev.persistence.repository;
 
+import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.dom.ChatRoom;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Map<Long, ChatRoom> chatRooms = new HashMap<Long, ChatRoom>();
+    private Map<Long, ChatRoom> chatRooms = new HashMap<>();
 
     public ChatRoomRepositoryImpl() {
     }

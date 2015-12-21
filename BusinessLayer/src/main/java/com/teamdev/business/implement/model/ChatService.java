@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+
 public class ChatService {
 
     private static final Logger logger = Logger.getLogger(ChatService.class);
@@ -31,8 +32,11 @@ public class ChatService {
     }
 
     public static void main(String[] args) throws Exception {
+        ApplicationContext businessContext = new ClassPathXmlApplicationContext("META-INF/beansBusiness.xml");
+//        ApplicationContext persistenceContext = new ClassPathXmlApplicationContext("META-INF/beansPersistence.xml");
+        ApplicationContext repositoryContext = new ClassPathXmlApplicationContext("META-INF/beansRepository.xml");
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/beans.xml");
-        ChatService service = (ChatService) context.getBean("");
+        UserServiceImpl userService = (UserServiceImpl) businessContext.getBean("userService");
+//        userService.register(new User("vasya", "mail", "pwd"));
     }
 }

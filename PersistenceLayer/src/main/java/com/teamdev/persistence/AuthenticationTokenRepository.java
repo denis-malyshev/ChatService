@@ -1,4 +1,4 @@
-package com.teamdev.persistence.repository;
+package com.teamdev.persistence;
 
 import com.teamdev.persistence.Repository;
 import com.teamdev.persistence.dom.AuthenticationToken;

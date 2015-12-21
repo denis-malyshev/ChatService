@@ -6,22 +6,22 @@ import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.repository.ChatRoomRepository;
+import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.repository.RepositoryFactory;
-import com.teamdev.persistence.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("chatService")
 public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken> {
 
-    @Autowired
     private ChatRoomRepository repository;
-    @Autowired
     private UserRepository userRepository;
     private MessageServiceImpl messageService;
     private AuthenticationServiceImpl authenticationService;
     private long count = 0;
+
+    public ChatRoomServiceImpl() {
+    }
 
     public ChatRoomServiceImpl(RepositoryFactory repositoryFactory,
                                AuthenticationServiceImpl authenticationService, MessageServiceImpl messageService) {

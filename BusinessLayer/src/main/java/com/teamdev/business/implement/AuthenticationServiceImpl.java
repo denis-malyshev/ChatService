@@ -4,21 +4,21 @@ import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.repository.AuthenticationTokenRepository;
-import com.teamdev.persistence.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.AuthenticationTokenRepository;
+import com.teamdev.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-@Service
+@Service("authenticationService")
 public class AuthenticationServiceImpl implements AuthenticationService<AuthenticationToken> {
 
-    @Autowired
     private AuthenticationTokenRepository tokenRepository;
-    @Autowired
     private UserRepository userRepository;
     private long count = 0;
+
+    public AuthenticationServiceImpl() {
+    }
 
     public AuthenticationServiceImpl(AuthenticationTokenRepository tokenRepository, UserRepository userRepository) {
         this.tokenRepository = tokenRepository;

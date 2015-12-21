@@ -4,8 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
-public final class Message {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,8 +12,11 @@ public final class Message {
 
     private LocalDateTime time;
     private String text;
+    @OneToOne
     private User sender;
+    @OneToOne
     private User receiver;
+    @OneToOne
     private ChatRoom chat;
 
     public Message() {

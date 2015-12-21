@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <context:annotation-config/>
+    <context:component-scan base-package="com.teamdev.persistence"/>
+
+    <bean id="user" class="com.teamdev.persistence.dom.User">
+    </bean>
+    <bean id="message" class="com.teamdev.persistence.dom.Message">
+    </bean>
+    <bean id="chat" class="com.teamdev.persistence.dom.ChatRoom">
+    </bean>
+    <bean id="token" class="com.teamdev.persistence.dom.AuthenticationToken">
+    </bean>
+
+    <bean id="userRepository" class="com.teamdev.persistence.repository.UserRepositoryImpl">
+    </bean>
+    <bean id="messageRepository" class="com.teamdev.persistence.repository.MessageRepositoryImpl">
+    </bean>
+    <bean id="chatRoomRepository" class="com.teamdev.persistence.repository.ChatRoomRepositoryImpl">
+    </bean>
+    <bean id="tokenRepository" class="com.teamdev.persistence.repository.AuthenticationTokenRepositoryImpl">
+    </bean>
+
+</beans>

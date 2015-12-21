@@ -5,15 +5,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table
-public final class ChatRoom {
+public class ChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
+    @OneToMany
     private Set<Message> messages = new HashSet<Message>();
+    @OneToMany
     private Set<User> users = new HashSet<User>();
 
     public ChatRoom() {

@@ -2,6 +2,7 @@ package com.teamdev.business;
 
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.dom.ChatRoom;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface ChatRoomService<AuthenticationToken> {

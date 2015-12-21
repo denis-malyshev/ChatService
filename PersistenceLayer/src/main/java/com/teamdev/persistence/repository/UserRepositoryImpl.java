@@ -1,5 +1,6 @@
 package com.teamdev.persistence.repository;
 
+import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Map<Long, User> users = new HashMap<Long, User>();
+    private Map<Long, User> users = new HashMap<>();
 
     public UserRepositoryImpl() {
     }

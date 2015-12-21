@@ -7,20 +7,20 @@ import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
-import com.teamdev.persistence.repository.MessageRepository;
 import com.teamdev.persistence.repository.RepositoryFactory;
-import com.teamdev.persistence.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService<AuthenticationToken> {
 
-    @Autowired
     private UserRepository userRepository;
     private AuthenticationService authenticationService;
     private MessageService messageService;
     private long count = 0;
+
+    public UserServiceImpl() {
+    }
 
     public UserServiceImpl(RepositoryFactory repositoryFactory,
                            AuthenticationService authenticationService, MessageService messageService) {
@@ -30,9 +30,10 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
     }
 
     public void register(User user) throws AuthenticationError {
-        if (userRepository.findByMail(user.getMail()) != null) {
-            throw new AuthenticationError("User with the same mail already exists.");
-        }
+        if (userRepository.count() > 0)
+            if (userRepository.findByMail(user.getMail()) != null) {
+                throw new AuthenticationError("User with the same mail already exists.");
+            }
         user.setId(count++);
         userRepository.update(user);
     }

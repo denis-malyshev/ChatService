@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
-public final class User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +17,11 @@ public final class User {
     private String mail;
     private String password;
 
+    @OneToOne
     private AuthenticationToken token;
+    @OneToMany
     private List<Message> messages = new ArrayList<>();
-
+    @OneToMany
     private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
 
     public User() {

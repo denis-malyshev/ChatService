@@ -2,17 +2,17 @@ package com.teamdev.business.implement;
 
 import com.teamdev.business.MessageService;
 import com.teamdev.persistence.dom.Message;
-import com.teamdev.persistence.repository.MessageRepository;
-import com.teamdev.persistence.repository.MessageRepositoryImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.MessageRepository;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("messageService")
 public class MessageServiceImpl implements MessageService<Message> {
 
-    @Autowired
     private MessageRepository repository;
     private long count = 0;
+
+    public MessageServiceImpl() {
+    }
 
     public MessageServiceImpl(MessageRepository repository) {
         this.repository = repository;

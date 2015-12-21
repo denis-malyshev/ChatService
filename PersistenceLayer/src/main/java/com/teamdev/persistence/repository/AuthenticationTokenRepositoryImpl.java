@@ -1,5 +1,6 @@
 package com.teamdev.persistence.repository;
 
+import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRep
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Map<Long, AuthenticationToken> tokens = new HashMap<Long, AuthenticationToken>();
+    private Map<Long, AuthenticationToken> tokens = new HashMap<>();
 
     public AuthenticationTokenRepositoryImpl() {
     }

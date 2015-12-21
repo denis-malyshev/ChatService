@@ -1,5 +1,10 @@
 package com.teamdev.persistence.repository;
 
+import com.teamdev.persistence.AuthenticationTokenRepository;
+import com.teamdev.persistence.ChatRoomRepository;
+import com.teamdev.persistence.MessageRepository;
+import com.teamdev.persistence.UserRepository;
+
 public final class RepositoryFactory {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
