@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PrePersist;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
     public ChatRoom findById(long id) {
         return chatRooms.get(id);
+    }
+
+    @Override
+    public ChatRoom findByName(String name) {
+        return chatRooms.values().stream().filter(x -> x.getName().equals(name)).findFirst().orElse(null);
     }
 
     public Collection<ChatRoom> findAll() {
