@@ -17,17 +17,14 @@ public class ChatRoomServiceTest {
     ChatService service = new ChatService(repositoryFactory);
     AuthenticationToken token;
     ChatRoom chatRoom;
-    User user1;
-    User user2;
+    User user;
 
     @Before
     public void setUp() throws Exception {
         token = new AuthenticationToken(0L);
         repositoryFactory.getTokenRepository().update(token);
-        user1 = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
-        user2 = new User("Masha", "masha@gmail.com", "pwd123");
-        repositoryFactory.getUserRepository().update(user1);
-        repositoryFactory.getUserRepository().update(user2);
+        user = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
+        repositoryFactory.getUserRepository().update(user);
         chatRoom = new ChatRoom("freeRoom");
         service.chatRoomService.create(chatRoom);
     }
@@ -42,14 +39,14 @@ public class ChatRoomServiceTest {
 
     @Test
     public void sendMessageToChat() throws Exception {
-        service.chatRoomService.sendMessage(token, "Hello", user1.getId(), chatRoom.getId());
+        service.chatRoomService.sendMessage(token, "Hello", user.getId(), chatRoom.getId());
         int actual = chatRoom.getMessages().size();
         assertEquals("Count of messages must be 1", 1, actual);
     }
 
     @Test
     public void joinUserToChat() throws Exception {
-        service.chatRoomService.joinToChatRoom(token, user1.getId(), chatRoom.getId());
+        service.chatRoomService.joinToChatRoom(token, user.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 1", 1, actual);
     }
@@ -57,7 +54,7 @@ public class ChatRoomServiceTest {
     @Test
     public void leaveFromChat() throws Exception {
         joinUserToChat();
-        service.chatRoomService.leaveChatRoom(token, user1.getId(), chatRoom.getId());
+        service.chatRoomService.leaveChatRoom(token, user.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 0", 0, actual);
     }

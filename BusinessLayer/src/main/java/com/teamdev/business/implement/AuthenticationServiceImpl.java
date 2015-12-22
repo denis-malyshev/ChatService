@@ -27,6 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
 
     public void login(String userMail, String password) throws AuthenticationError {
         User user = userRepository.findByMail(userMail);
+        if (user == null) {
+            throw new AuthenticationError("Invalid login or password.");
+        }
         if (!user.getPassword().equals(password)) {
             throw new AuthenticationError("Invalid login or password.");
         }
@@ -47,6 +50,14 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
 
     public AuthenticationTokenRepository getTokenRepository() {
         return tokenRepository;
+    }
+
+    public void setTokenRepository(AuthenticationTokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     private AuthenticationToken generateToken(long userId) {

@@ -68,6 +68,6 @@ public class UserServiceTest {
 
         ChatRoom chatRoom = repositoryFactory.getChatRoomRepository().findByName(builder.toString());
         int actual = chatRoom.getMessages().size();
-        assertEquals("", 2, actual);
+        assertEquals("Count of message must be 2", 2, actual);
     }
 }

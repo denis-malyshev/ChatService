@@ -71,4 +71,20 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
         sender.getMessages().add(message);
         receiver.getMessages().add(message);
     }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setChatRoomRepository(ChatRoomRepository chatRoomRepository) {
+        this.chatRoomRepository = chatRoomRepository;
+    }
+
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
 }

@@ -72,4 +72,19 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
         repository.findById(chatRoomId).getUsers().remove(user);
     }
 
+    public void setRepository(ChatRoomRepository repository) {
+        this.repository = repository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setMessageService(MessageServiceImpl messageService) {
+        this.messageService = messageService;
+    }
+
+    public void setAuthenticationService(AuthenticationServiceImpl authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 }

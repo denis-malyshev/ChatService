@@ -34,15 +34,6 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void loginNullUserTest() throws Exception {
-        int before = repositoryFactory.getTokenRepository().count();
-        service.authenticationService.login("vasya@gmail.com", "asd123");
-        int after = repositoryFactory.getTokenRepository().count();
-        int result = after - before;
-        assertEquals("", 1, result);
-    }
-
-    @Test
     public void actualTokenValidation() throws Exception {
         AuthenticationToken token = new AuthenticationToken(0L);
         service.authenticationService.getTokenRepository().update(token);

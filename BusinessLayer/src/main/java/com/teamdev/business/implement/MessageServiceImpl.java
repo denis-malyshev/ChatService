@@ -22,4 +22,8 @@ public class MessageServiceImpl implements MessageService<Message> {
         message.setId(count++);
         repository.update(message);
     }
+
+    public void setRepository(MessageRepository repository) {
+        this.repository = repository;
+    }
 }
