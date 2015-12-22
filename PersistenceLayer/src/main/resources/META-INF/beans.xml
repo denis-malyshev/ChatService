@@ -26,6 +26,5 @@
     </bean>
     <bean id="tokenRepository" class="com.teamdev.persistence.repository.AuthenticationTokenRepositoryImpl">
     </bean>
-    <bean class="com.teamdev.business.UserServiceTest" id=""/>
 
 </beans>
