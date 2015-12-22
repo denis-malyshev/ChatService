@@ -30,6 +30,15 @@ public class AuthenticationServiceTest {
         service.authenticationService.login("vasya@gmail.com", "asd123");
         int after = repositoryFactory.getTokenRepository().count();
         int result = after - before;
+        assertEquals("The number of users is expected to increase by 1", 1, result);
+    }
+
+    @Test
+    public void loginNullUserTest() throws Exception {
+        int before = repositoryFactory.getTokenRepository().count();
+        service.authenticationService.login("vasya@gmail.com", "asd123");
+        int after = repositoryFactory.getTokenRepository().count();
+        int result = after - before;
         assertEquals("", 1, result);
     }
 
