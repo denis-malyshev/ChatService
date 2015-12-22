@@ -71,4 +71,14 @@ public class ExceptionTest {
     public void authenticationErrorTest() throws AuthenticationError {
         service.authenticationService.isValid(invalidToken);
     }
+
+    @Test
+    public void errorMessageForLoginNonExistentUser() {
+        try {
+            service.authenticationService.login("vasya@gmail.com", "asd123");
+            fail();
+        } catch (AuthenticationError authenticationError) {
+            assertEquals("Invalid login or password.", authenticationError.getMessage());
+        }
+    }
 }
