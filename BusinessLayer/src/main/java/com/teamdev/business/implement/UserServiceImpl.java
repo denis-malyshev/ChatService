@@ -4,17 +4,22 @@ import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.MessageService;
 import com.teamdev.business.UserService;
 import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
+import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
 import com.teamdev.persistence.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service("userService")
 public class UserServiceImpl implements UserService<AuthenticationToken> {
 
     private UserRepository userRepository;
+    private ChatRoomRepository chatRoomRepository;
     private AuthenticationService authenticationService;
     private MessageService messageService;
     private long count = 0;
@@ -24,9 +29,10 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
 
     public UserServiceImpl(RepositoryFactory repositoryFactory,
                            AuthenticationService authenticationService, MessageService messageService) {
-        this.messageService = messageService;
         this.userRepository = repositoryFactory.getUserRepository();
+        this.chatRoomRepository = repositoryFactory.getChatRoomRepository();
         this.authenticationService = authenticationService;
+        this.messageService = messageService;
     }
 
     public void register(User user) throws AuthenticationError {
@@ -47,8 +53,20 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
         User receiver = userRepository.findById(receiverID);
 
         Message message = new Message(text, sender, receiver);
-
         messageService.register(message);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("private-room-").append(senderId).append(receiverID);
+
+        String chatRoomName = builder.toString();
+        ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
+        if (chatRoom == null) {
+            chatRoom = new ChatRoom(chatRoomName);
+        }
+        chatRoom.getUsers().add(sender);
+        chatRoom.getUsers().add(receiver);
+        chatRoom.getMessages().add(message);
+        chatRoomRepository.update(chatRoom);
 
         sender.getMessages().add(message);
         receiver.getMessages().add(message);

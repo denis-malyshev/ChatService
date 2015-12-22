@@ -1,6 +1,5 @@
 package com.teamdev.persistence;
 
-import com.teamdev.persistence.Repository;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 
