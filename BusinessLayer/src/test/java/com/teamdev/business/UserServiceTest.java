@@ -1,6 +1,5 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.business.implement.model.ChatService;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
@@ -18,6 +17,8 @@ public class UserServiceTest {
     ChatService service;
     AuthenticationToken token;
     ChatRoom chatRoom;
+    User ivan;
+    User masha;
 
     @Before
     public void setUp() throws Exception {
@@ -30,22 +31,28 @@ public class UserServiceTest {
     }
 
     @Test
-    public void registerUser() throws Exception {
-        User user = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
-        service.userService.register(user);
-        User actual = repositoryFactory.getUserRepository().findById(user.getId());
+    public void registerUserIvan() throws Exception {
+        ivan = new User("Ivan", "ivana@gmail.com", "pa$$vv0rd");
+        service.userService.register(ivan);
+        User actual = repositoryFactory.getUserRepository().findById(ivan.getId());
         assertNotNull("The user must exist", actual);
     }
 
     @Test
-    public void sendPrivateMessageTestMessageCount() throws AuthenticationError {
+    public void registerUserMasha() throws Exception {
+        masha = new User("Masha", "masha@gmail.com", "pa$$vv0rd1");
+        service.userService.register(masha);
+        User actual = repositoryFactory.getUserRepository().findById(masha.getId());
+        assertNotNull("The user must exist", actual);
+    }
 
-        User sender = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
-        User recipient = new User("Petya", "petya@gmail.com", "pa$$vv0rd");
+    @Test
+    public void sendPrivateMessageTestMessageCount() throws Exception {
 
-        service.userService.register(sender);
-        service.userService.register(recipient);
-        service.userService.sendPrivateMessage(token, "Hello", sender.getId(), recipient.getId());
+        registerUserIvan();
+        registerUserMasha();
+
+        service.userService.sendPrivateMessage(token, "Hello", ivan.getId(), masha.getId());
 
         int actual = repositoryFactory.getMessageRepository().count();
         assertEquals("Count of message must be 1", 1, actual);
@@ -54,19 +61,16 @@ public class UserServiceTest {
     @Test
     public void sendPrivateMessageInExistingPrivateChat() throws Exception {
 
-        User sender = new User("Vasya", "vasya@gmail.com", "pa$$vv0rd");
-        User recipient = new User("Petya", "petya@gmail.com", "pa$$vv0rd");
+        registerUserIvan();
+        registerUserMasha();
 
-        service.userService.register(sender);
-        service.userService.register(recipient);
-        service.userService.sendPrivateMessage(token, "Hello", sender.getId(), recipient.getId());
+        service.userService.sendPrivateMessage(token, "Hello", ivan.getId(), masha.getId());
+        service.userService.sendPrivateMessage(token, "Hi", ivan.getId(), masha.getId());
 
-        service.userService.sendPrivateMessage(token, "Hi", sender.getId(), recipient.getId());
+        StringBuilder chatRoomName = new StringBuilder();
+        chatRoomName.append("private-room-").append(ivan.getId()).append(masha.getId());
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("private-room-").append(sender.getId()).append(recipient.getId());
-
-        ChatRoom chatRoom = repositoryFactory.getChatRoomRepository().findByName(builder.toString());
+        ChatRoom chatRoom = repositoryFactory.getChatRoomRepository().findByName(chatRoomName.toString());
         int actual = chatRoom.getMessages().size();
         assertEquals("Count of message must be 2", 2, actual);
     }

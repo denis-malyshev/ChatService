@@ -38,9 +38,16 @@ public class ChatRoomServiceTest {
     }
 
     @Test
-    public void sendMessageToChat() throws Exception {
+    public void sendMessageToChatTestMessageCountInChatRoom() throws Exception {
         service.chatRoomService.sendMessage(token, "Hello", user.getId(), chatRoom.getId());
         int actual = chatRoom.getMessages().size();
+        assertEquals("Count of messages must be 1", 1, actual);
+    }
+
+    @Test
+    public void sendMessageToChatTestUserMessageCount() throws Exception {
+        service.chatRoomService.sendMessage(token, "Hello", user.getId(), chatRoom.getId());
+        int actual = user.getMessages().size();
         assertEquals("Count of messages must be 1", 1, actual);
     }
 
@@ -57,5 +64,13 @@ public class ChatRoomServiceTest {
         service.chatRoomService.leaveChatRoom(token, user.getId(), chatRoom.getId());
         int actual = chatRoom.getUsers().size();
         assertEquals("Count of users must be 0", 0, actual);
+    }
+
+    @Test
+    public void leaveFromChatInvalidUser() throws Exception {
+        joinUserToChat();
+        service.chatRoomService.leaveChatRoom(token, 657, chatRoom.getId());
+        int actual = chatRoom.getUsers().size();
+        assertEquals("Count of users must be 1", 1, actual);
     }
 }
