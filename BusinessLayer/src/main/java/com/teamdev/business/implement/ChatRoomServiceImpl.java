@@ -42,9 +42,11 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
 
         authenticationService.isValid(token);
 
+        ChatRoom chatRoom = repository.findById(chatRoomId);
         User user = userRepository.findById(userId);
 
-        repository.findById(chatRoomId).getUsers().add(user);
+        user.getChatRooms().add(chatRoom);
+        chatRoom.getUsers().add(user);
     }
 
     public void sendMessage(AuthenticationToken token, String text,
@@ -59,7 +61,8 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
 
         messageService.register(message);
 
-        repository.findById(chatRoom.getId()).getMessages().add(message);
+        user.getMessages().add(message);
+        chatRoom.getMessages().add(message);
     }
 
     public void leaveChatRoom(AuthenticationToken token,
@@ -68,8 +71,13 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
         authenticationService.isValid(token);
 
         User user = userRepository.findById(userId);
+        if (user == null) {
+            return;
+        }
+        ChatRoom chatRoom = repository.findById(chatRoomId);
 
-        repository.findById(chatRoomId).getUsers().remove(user);
+        user.getChatRooms().remove(chatRoom);
+        chatRoom.getUsers().remove(user);
     }
 
     public void setRepository(ChatRoomRepository repository) {
