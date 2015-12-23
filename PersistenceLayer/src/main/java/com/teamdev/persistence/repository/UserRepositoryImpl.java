@@ -4,15 +4,12 @@ import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private Map<Long, User> users = new HashMap<>();
 
@@ -29,7 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public Collection<User> findAll() {
-        //entityManager.createQuery("from User", User.class).getResultList();
         return users.values();
     }
 
@@ -39,7 +35,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void update(User user) {
         users.put(user.getId(), user);
-        //entityManager.persist(user);
     }
 
     public void delete(long id) {

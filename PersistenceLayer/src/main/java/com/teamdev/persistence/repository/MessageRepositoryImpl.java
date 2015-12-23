@@ -5,8 +5,6 @@ import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,9 +14,6 @@ import java.util.stream.Collectors;
 
 @Repository
 public class MessageRepositoryImpl implements MessageRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private Map<Long, Message> messages = new HashMap<>();
 

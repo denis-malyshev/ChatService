@@ -25,10 +25,4 @@ public class ChatService {
         userService = new UserServiceImpl(repositoryFactory, authenticationService, messageService);
         chatRoomService = new ChatRoomServiceImpl(repositoryFactory, authenticationService, messageService);
     }
-
-    public static void main(String[] args) throws Exception {
-//        ApplicationContext businessContext = new ClassPathXmlApplicationContext("META-INF/beansBusiness.xml");
-//        ApplicationContext persistenceContext = new ClassPathXmlApplicationContext("META-INF/beansPersistence.xml");
-//        ApplicationContext repositoryContext = new ClassPathXmlApplicationContext("META-INF/beansRepository.xml");
-    }
 }

@@ -2,10 +2,10 @@ package com.teamdev.business.implement;
 
 import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.implement.error.AuthenticationError;
-import com.teamdev.persistence.dom.AuthenticationToken;
-import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.UserRepository;
+import com.teamdev.persistence.dom.AuthenticationToken;
+import com.teamdev.persistence.dom.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

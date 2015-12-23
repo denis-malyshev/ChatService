@@ -5,15 +5,13 @@ import com.teamdev.business.MessageService;
 import com.teamdev.business.UserService;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.ChatRoomRepository;
+import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
-import com.teamdev.persistence.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
 
 @Service("userService")
 public class UserServiceImpl implements UserService<AuthenticationToken> {

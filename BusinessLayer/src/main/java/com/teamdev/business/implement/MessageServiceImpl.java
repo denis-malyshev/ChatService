@@ -1,8 +1,8 @@
 package com.teamdev.business.implement;
 
 import com.teamdev.business.MessageService;
-import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.MessageRepository;
+import com.teamdev.persistence.dom.Message;
 import org.springframework.stereotype.Service;
 
 @Service("messageService")
