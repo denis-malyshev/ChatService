@@ -20,7 +20,7 @@ public class ChatServiceOnSpring {
 
     public ChatServiceOnSpring() {
 
-        businessContext = new ClassPathXmlApplicationContext("META-INF/beansBusiness.xml");
+        businessContext = new ClassPathXmlApplicationContext("/META-INF/beansBusiness.xml");
         userService = (UserServiceImpl) businessContext.getBean("userService");
         chatRoomService = (ChatRoomServiceImpl) businessContext.getBean("chatService");
         tokenService = (AuthenticationServiceImpl) businessContext.getBean("tokenService");
