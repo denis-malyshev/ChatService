@@ -30,6 +30,14 @@ public class ChatServiceOnSpring {
 
         ChatServiceOnSpring service = new ChatServiceOnSpring();
 
-        service.userService.register(new User("vasya", "vasya@gmail.com", "pwd"));
+        User vasya = new User("Vasya", "vasya@gmail.com", "pwd");
+        User masha = new User("Masha", "masha@gmail.com", "pass");
+
+        service.userService.register(vasya);
+        service.userService.register(masha);
+
+        service.tokenService.login("vasya@gmail.com", "pwd");
+
+        service.userService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
     }
 }

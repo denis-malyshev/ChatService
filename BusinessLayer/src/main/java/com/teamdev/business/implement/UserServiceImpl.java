@@ -11,12 +11,15 @@ import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("userService")
 public class UserServiceImpl implements UserService<AuthenticationToken> {
 
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private ChatRoomRepository chatRoomRepository;
     private AuthenticationService authenticationService;
     private MessageService messageService;

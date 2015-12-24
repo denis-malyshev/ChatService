@@ -6,6 +6,7 @@ import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 @Service("authenticationService")
 public class AuthenticationServiceImpl implements AuthenticationService<AuthenticationToken> {
 
+    @Autowired
     private AuthenticationTokenRepository tokenRepository;
+    @Autowired
     private UserRepository userRepository;
     private long count = 0;
 
