@@ -7,15 +7,25 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <context:annotation-config/>
-    <context:component-scan base-package="com.teamdev.persistence"/>
+    <context:component-scan base-package="com.teamdev.business.implement"/>
 
-    <bean id="user" class="com.teamdev.persistence.dom.User">
+    <bean id="userService" class="com.teamdev.business.implement.UserServiceImpl">
+        <property name="userRepository" ref="userRepository"/>
     </bean>
-    <bean id="message" class="com.teamdev.persistence.dom.Message">
+    <bean id="messageService" class="com.teamdev.business.implement.MessageServiceImpl">
+        <property name="messageRepository" ref="messageRepository"/>
+        <property name="userRepository" ref="userRepository"/>
+        <property name="chatRoomRepository" ref="chatRoomRepository"/>
+        <property name="authenticationService" ref="tokenService"/>
     </bean>
-    <bean id="chat" class="com.teamdev.persistence.dom.ChatRoom">
+    <bean id="chatService" class="com.teamdev.business.implement.ChatRoomServiceImpl">
+        <property name="chatRoomRepository" ref="chatRoomRepository"/>
+        <property name="userRepository" ref="userRepository"/>
+        <property name="authenticationService" ref="authenticationService"/>
     </bean>
-    <bean id="token" class="com.teamdev.persistence.dom.AuthenticationToken">
+    <bean id="tokenService" class="com.teamdev.business.implement.AuthenticationServiceImpl">
+        <property name="userRepository" ref="userRepository"/>
+        <property name="tokenRepository" ref="tokenRepository"/>
     </bean>
 
     <bean id="userRepository" class="com.teamdev.persistence.repository.UserRepositoryImpl">
