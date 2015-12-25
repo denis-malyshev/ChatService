@@ -17,12 +17,11 @@ public class User {
     private String mail;
     private String password;
 
-    @OneToOne
-    private AuthenticationToken token;
+    private String token;
     @OneToMany
     private List<Message> messages = new ArrayList<>();
     @OneToMany
-    private Set<ChatRoom> chatRooms = new HashSet<ChatRoom>();
+    private Set<ChatRoom> chatRooms = new HashSet<>();
 
     public User() {
     }
@@ -33,11 +32,11 @@ public class User {
         this.password = password;
     }
 
-    public AuthenticationToken getToken() {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(AuthenticationToken token) {
+    public void setToken(String token) {
         this.token = token;
     }
 

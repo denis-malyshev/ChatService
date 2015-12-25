@@ -19,10 +19,10 @@ public class ChatService {
 
     public ChatService(RepositoryFactory repositoryFactory) {
         this.repositoryFactory = repositoryFactory;
-        messageService = new MessageServiceImpl(repositoryFactory.getMessageRepository());
+        messageService = new MessageServiceImpl(repositoryFactory.getMessageRepository(),repositoryFactory.getUserRepository());
         authenticationService = new AuthenticationServiceImpl(repositoryFactory.getTokenRepository(),
                 repositoryFactory.getUserRepository());
-        userService = new UserServiceImpl(repositoryFactory, authenticationService, messageService);
-        chatRoomService = new ChatRoomServiceImpl(repositoryFactory, authenticationService, messageService);
+        userService = new UserServiceImpl(repositoryFactory);
+        chatRoomService = new ChatRoomServiceImpl(repositoryFactory,authenticationService);
     }
 }

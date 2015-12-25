@@ -1,39 +1,25 @@
 package com.teamdev.business.implement;
 
-import com.teamdev.business.AuthenticationService;
-import com.teamdev.business.MessageService;
 import com.teamdev.business.UserService;
 import com.teamdev.business.implement.error.AuthenticationError;
-import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.UserRepository;
-import com.teamdev.persistence.dom.AuthenticationToken;
-import com.teamdev.persistence.dom.ChatRoom;
-import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("userService")
-public class UserServiceImpl implements UserService<AuthenticationToken> {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
-    private AuthenticationService authenticationService;
-    private MessageService messageService;
     private long count = 0;
 
     public UserServiceImpl() {
     }
 
-    public UserServiceImpl(RepositoryFactory repositoryFactory,
-                           AuthenticationService authenticationService, MessageService messageService) {
+    public UserServiceImpl(RepositoryFactory repositoryFactory) {
         this.userRepository = repositoryFactory.getUserRepository();
-        this.chatRoomRepository = repositoryFactory.getChatRoomRepository();
-        this.authenticationService = authenticationService;
-        this.messageService = messageService;
     }
 
     public void register(User user) throws AuthenticationError {
@@ -45,47 +31,7 @@ public class UserServiceImpl implements UserService<AuthenticationToken> {
         userRepository.update(user);
     }
 
-    public void sendPrivateMessage(AuthenticationToken token, String text,
-                                   long senderId, long receiverID) throws AuthenticationError {
-
-        authenticationService.isValid(token);
-
-        User sender = userRepository.findById(senderId);
-        User receiver = userRepository.findById(receiverID);
-
-        Message message = new Message(text, sender, receiver);
-        messageService.register(message);
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("private-room-").append(senderId).append(receiverID);
-
-        String chatRoomName = builder.toString();
-        ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
-        if (chatRoom == null) {
-            chatRoom = new ChatRoom(chatRoomName);
-        }
-        chatRoom.getUsers().add(sender);
-        chatRoom.getUsers().add(receiver);
-        chatRoom.getMessages().add(message);
-        chatRoomRepository.update(chatRoom);
-
-        sender.getMessages().add(message);
-        receiver.getMessages().add(message);
-    }
-
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    public void setChatRoomRepository(ChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
-    }
-
-    public void setAuthenticationService(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
-
-    public void setMessageService(MessageService messageService) {
-        this.messageService = messageService;
     }
 }

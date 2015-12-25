@@ -20,6 +20,11 @@ public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRep
         return tokens.get(id);
     }
 
+    @Override
+    public AuthenticationToken findByKey(String key) {
+        return tokens.values().stream().filter(x->x.getKey().equals(key)).findFirst().orElse(null);
+    }
+
     public Collection<AuthenticationToken> findAll() {
         return tokens.values();
     }

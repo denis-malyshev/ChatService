@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service("authenticationService")
-public class AuthenticationServiceImpl implements AuthenticationService<AuthenticationToken> {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     private AuthenticationTokenRepository tokenRepository;
@@ -37,22 +37,18 @@ public class AuthenticationServiceImpl implements AuthenticationService<Authenti
             throw new AuthenticationError("Invalid login or password.");
         }
         AuthenticationToken token = generateToken(user.getId());
-        user.setToken(token);
+        user.setToken(token.getKey());
     }
 
-    public boolean isValid(AuthenticationToken token) throws AuthenticationError {
-        AuthenticationToken innerToken = tokenRepository.findById(token.getId());
-        if (!innerToken.getKey().equals(token.getKey())) {
+    public boolean isValid(String token) throws AuthenticationError {
+        AuthenticationToken innerToken = tokenRepository.findByKey(token);
+        if (innerToken == null) {
             throw new AuthenticationError("Invalid token key.");
         }
-        if (token.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
+        if (innerToken.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
             throw new AuthenticationError("Token has been expired.");
         }
         return true;
-    }
-
-    public AuthenticationTokenRepository getTokenRepository() {
-        return tokenRepository;
     }
 
     public void setTokenRepository(AuthenticationTokenRepository tokenRepository) {

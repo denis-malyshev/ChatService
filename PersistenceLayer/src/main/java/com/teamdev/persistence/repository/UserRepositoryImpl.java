@@ -2,6 +2,7 @@ package com.teamdev.persistence.repository;
 
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;

@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("chatService")
-public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken> {
+public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Autowired
-    private ChatRoomRepository repository;
+    private ChatRoomRepository chatRoomRepository;
     @Autowired
     private UserRepository userRepository;
-    private MessageServiceImpl messageService;
+    @Autowired
     private AuthenticationServiceImpl authenticationService;
     private long count = 0;
 
@@ -27,48 +27,30 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
     }
 
     public ChatRoomServiceImpl(RepositoryFactory repositoryFactory,
-                               AuthenticationServiceImpl authenticationService, MessageServiceImpl messageService) {
-        this.repository = repositoryFactory.getChatRoomRepository();
+                               AuthenticationServiceImpl authenticationService) {
+        this.chatRoomRepository = repositoryFactory.getChatRoomRepository();
         this.authenticationService = authenticationService;
-        this.messageService = messageService;
         this.userRepository = repositoryFactory.getUserRepository();
     }
 
-    public boolean create(ChatRoom chatRoom) {
+    public void create(ChatRoom chatRoom) {
         chatRoom.setId(count++);
-        repository.update(chatRoom);
-        return true;
+        chatRoomRepository.update(chatRoom);
     }
 
-    public void joinToChatRoom(AuthenticationToken token,
+    public void joinToChatRoom(String token,
                                long userId, long chatRoomId) throws AuthenticationError {
 
         authenticationService.isValid(token);
 
-        ChatRoom chatRoom = repository.findById(chatRoomId);
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
         User user = userRepository.findById(userId);
 
         user.getChatRooms().add(chatRoom);
         chatRoom.getUsers().add(user);
     }
 
-    public void sendMessage(AuthenticationToken token, String text,
-                            long userId, long chatRoomId) throws AuthenticationError {
-
-        authenticationService.isValid(token);
-
-        User user = userRepository.findById(userId);
-        ChatRoom chatRoom = repository.findById(chatRoomId);
-
-        Message message = new Message(text, user, chatRoom);
-
-        messageService.register(message);
-
-        user.getMessages().add(message);
-        chatRoom.getMessages().add(message);
-    }
-
-    public void leaveChatRoom(AuthenticationToken token,
+    public void leaveChatRoom(String token,
                               long userId, long chatRoomId) throws AuthenticationError {
 
         authenticationService.isValid(token);
@@ -77,23 +59,20 @@ public class ChatRoomServiceImpl implements ChatRoomService<AuthenticationToken>
         if (user == null) {
             return;
         }
-        ChatRoom chatRoom = repository.findById(chatRoomId);
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
 
         user.getChatRooms().remove(chatRoom);
         chatRoom.getUsers().remove(user);
     }
 
-    public void setRepository(ChatRoomRepository repository) {
-        this.repository = repository;
+    public void setChatRoomRepository(ChatRoomRepository chatRoomRepository) {
+        this.chatRoomRepository = chatRoomRepository;
     }
 
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void setMessageService(MessageServiceImpl messageService) {
-        this.messageService = messageService;
-    }
 
     public void setAuthenticationService(AuthenticationServiceImpl authenticationService) {
         this.authenticationService = authenticationService;

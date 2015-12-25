@@ -18,11 +18,11 @@ public class ChatServiceOnSpring {
 
     public ChatServiceOnSpring() {
 
-        ApplicationContext businessContext = new ClassPathXmlApplicationContext("/META-INF/beansBusiness.xml");
-        userService = (UserServiceImpl) businessContext.getBean("userService");
-        chatRoomService = (ChatRoomServiceImpl) businessContext.getBean("chatService");
-        tokenService = (AuthenticationServiceImpl) businessContext.getBean("tokenService");
-        messageService = (MessageServiceImpl) businessContext.getBean("messageService");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/META-INF/beans.xml");
+        userService = (UserServiceImpl) applicationContext.getBean("userService");
+        chatRoomService = (ChatRoomServiceImpl) applicationContext.getBean("chatService");
+        tokenService = (AuthenticationServiceImpl) applicationContext.getBean("tokenService");
+        messageService = (MessageServiceImpl) applicationContext.getBean("messageService");
 
     }
 
@@ -38,6 +38,7 @@ public class ChatServiceOnSpring {
 
         service.tokenService.login("vasya@gmail.com", "pwd");
 
-        service.userService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
+        service.messageService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
+        service.messageService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
     }
 }
