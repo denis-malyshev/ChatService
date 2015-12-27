@@ -1,7 +1,6 @@
 package com.teamdev.business;
 
 import com.teamdev.business.implement.error.AuthenticationError;
-import org.springframework.stereotype.Service;
 
 public interface AuthenticationService {
 

@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
     }
 
+    @Override
+    public int count() {
+        return userRepository.count();
+    }
+
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
