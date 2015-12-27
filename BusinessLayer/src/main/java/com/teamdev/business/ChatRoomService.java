@@ -1,8 +1,11 @@
 package com.teamdev.business;
 
+import com.teamdev.business.implement.dto.ChatRoomDto;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.dom.ChatRoom;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 public interface ChatRoomService {
 
@@ -14,5 +17,7 @@ public interface ChatRoomService {
 
     @Transactional
     void leaveChatRoom(String token, long user, long chatRoomId) throws AuthenticationError;
+
+    Collection<ChatRoomDto> findAll();
 
 }

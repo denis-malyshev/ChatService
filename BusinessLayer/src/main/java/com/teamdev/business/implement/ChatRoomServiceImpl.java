@@ -1,6 +1,7 @@
 package com.teamdev.business.implement;
 
 import com.teamdev.business.ChatRoomService;
+import com.teamdev.business.implement.dto.ChatRoomDto;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.UserRepository;
@@ -9,6 +10,10 @@ import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 @Service("chatService")
 public class ChatRoomServiceImpl implements ChatRoomService {
@@ -61,6 +66,18 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
         user.getChatRooms().remove(chatRoom);
         chatRoom.getUsers().remove(user);
+    }
+
+    @Override
+    public Collection<ChatRoomDto> findAll() {
+        Collection<ChatRoom> chatRooms = chatRoomRepository.findAll();
+        Collection<ChatRoomDto> chatRoomDtos = new ArrayList<>();
+        Iterator<ChatRoom> iterator = chatRooms.iterator();
+        while (iterator.hasNext()) {
+            ChatRoom chat = iterator.next();
+            chatRoomDtos.add(new ChatRoomDto(chat.getName(),chat.getUsers().size(),chat.getMessages().size()));
+        }
+        return chatRoomDtos;
     }
 
     public void setChatRoomRepository(ChatRoomRepository chatRoomRepository) {
