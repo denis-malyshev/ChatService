@@ -1,5 +1,6 @@
 package com.teamdev.webapp;
 
+import com.teamdev.business.implement.dto.ChatRoomDto;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.business.implement.model.ChatServiceOnSpring;
 import com.teamdev.persistence.dom.ChatRoom;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 @WebServlet("/chats")
@@ -40,10 +43,16 @@ public class TestServlet extends HttpServlet {
 
         PrintWriter pw = resp.getWriter();
 
-        if (req.getContextPath().equals("chats")) {
-            pw.println("<H1>" + "NICE" + "</H1>");
+
+        if (req.getParameterNames().hasMoreElements() && req.getParameter("token").equals("abc")) {
+            Collection<ChatRoomDto> chatRoomDtos = service.chatRoomService.findAll();
+            Iterator<ChatRoomDto> iterator = chatRoomDtos.iterator();
+            while (iterator.hasNext()) {
+                pw.println("<H1>" + iterator.next().toString() + "</H1>");
+
+            }
         } else {
-            pw.println("<H1>" + "FAIL" + "</H1>");
+            resp.sendError(403, "Invalid token.");
         }
     }
 
@@ -58,6 +67,10 @@ public class TestServlet extends HttpServlet {
 
         service.userService.register(user1);
         service.userService.register(user2);
+
+        service.tokenService.login("vasya@gmail.com","pwd");
+
+        service.chatRoomService.joinToChatRoom(user1.getToken(),user1.getId(),chatRoom.getId());
 
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("Hello, Masha!", user1, user2));
