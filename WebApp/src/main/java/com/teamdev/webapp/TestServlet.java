@@ -2,9 +2,7 @@ package com.teamdev.webapp;
 
 import com.teamdev.business.implement.dto.ChatRoomDto;
 import com.teamdev.business.implement.error.AuthenticationError;
-import com.teamdev.business.implement.model.ChatServiceOnSpring;
 import com.teamdev.persistence.dom.ChatRoom;
-import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
 
 import javax.servlet.ServletException;
@@ -14,20 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 @WebServlet("/chats")
 public class TestServlet extends HttpServlet {
 
-    private ChatServiceOnSpring service;
+    private ServiceProvider services;
 
     @Override
     public void init() throws ServletException {
 
-        service = new ChatServiceOnSpring();
+        services = ServiceProvider.getInstance();
 
         try {
             generateSampleData();
@@ -44,12 +39,17 @@ public class TestServlet extends HttpServlet {
         PrintWriter pw = resp.getWriter();
 
 
-        if (req.getParameterNames().hasMoreElements() && req.getParameter("token").equals("abc")) {
-            Collection<ChatRoomDto> chatRoomDtos = service.chatRoomService.findAll();
-            Iterator<ChatRoomDto> iterator = chatRoomDtos.iterator();
-            while (iterator.hasNext()) {
-                pw.println("<H1>" + iterator.next().toString() + "</H1>");
-
+        if (req.getParameterNames().hasMoreElements() && !req.getParameter("token").isEmpty()) {
+            try {
+                if (services.getTokenService().isValid(req.getParameter("token"))) {
+                    Collection<ChatRoomDto> chatRoomDtos = services.getChatRoomService().findAll();
+                    pw.println("<H1>" + chatRoomDtos.size() + "</H1>");
+                    for (ChatRoomDto chatRoomDto : chatRoomDtos) {
+                        pw.println("<H1>" + chatRoomDto.toString() + "</H1>");
+                    }
+                }
+            } catch (AuthenticationError authenticationError) {
+                authenticationError.printStackTrace();
             }
         } else {
             resp.sendError(403, "Invalid token.");
@@ -60,26 +60,22 @@ public class TestServlet extends HttpServlet {
 
         ChatRoom chatRoom = new ChatRoom("TestRoom");
 
-        service.chatRoomService.create(chatRoom);
+        services.getChatRoomService().create(chatRoom);
 
-        User user1 = new User("Vasya", "vasya@gmai.com", "pwd");
+        User user1 = new User("Vasya", "vasya@gmail.com", "pwd");
         User user2 = new User("Masha", "masha@gmai.com", "pwd1");
 
-        service.userService.register(user1);
-        service.userService.register(user2);
+        services.getUserService().register(user1);
+        services.getUserService().register(user2);
 
-        service.tokenService.login("vasya@gmail.com","pwd");
+        services.getTokenService().login("vasya@gmail.com", "pwd");
+        services.getTokenService().login("masha@gmai.com", "pwd1");
 
-        service.chatRoomService.joinToChatRoom(user1.getToken(),user1.getId(),chatRoom.getId());
+        services.getChatRoomService().joinToChatRoom(user1.getToken(), user1.getId(), chatRoom.getId());
 
-        List<Message> messages = new ArrayList<>();
-        messages.add(new Message("Hello, Masha!", user1, user2));
-        messages.add(new Message("Hello, Vasya", user2, user1));
-        messages.add(new Message("How are you?", user1, user2));
-        messages.add(new Message("I'm fine. And you?", user2, user1));
-
-        for (int i = 0; i < messages.size(); i++) {
-            service.messageService.create(messages.get(i));
-        }
+        services.getMessageService().sendPrivateMessage(user1.getToken(), "Hello, Masha!", user1.getId(), user2.getId());
+        services.getMessageService().sendPrivateMessage(user1.getToken(), "Hello, Vasya", user1.getId(), user2.getId());
+        services.getMessageService().sendPrivateMessage(user1.getToken(), "How are you?", user1.getId(), user2.getId());
+        services.getMessageService().sendPrivateMessage(user1.getToken(), "I'm fine. And you?", user1.getId(), user2.getId());
     }
 }
