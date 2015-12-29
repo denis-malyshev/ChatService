@@ -1,7 +1,8 @@
 package com.teamdev.webapp;
 
-import com.teamdev.business.implement.dto.ChatRoomDto;
-import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.business.impl.dto.ChatRoomDTO;
+import com.teamdev.business.impl.dto.UserDTO;
+import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
 
@@ -24,8 +25,8 @@ public class TestServlet extends HttpServlet {
 
         try {
             generateSampleData();
-        } catch (AuthenticationError authenticationError) {
-            authenticationError.printStackTrace();
+        } catch (AuthenticationException authenticationException) {
+            authenticationException.printStackTrace();
         }
     }
 
@@ -36,34 +37,30 @@ public class TestServlet extends HttpServlet {
 
         PrintWriter printWriter = resp.getWriter();
 
-        Collection<ChatRoomDto> chatRoomDtos = services.getChatRoomService().findAll();
-        for (ChatRoomDto chatRoomDto : chatRoomDtos) {
-            printWriter.println("<H1>" + chatRoomDto.toString() + "</H1>");
+        Collection<ChatRoomDTO> chatRoomDTOs = services.getChatRoomService().findAll();
+        for (ChatRoomDTO chatRoomDTO : chatRoomDTOs) {
+            printWriter.println("<H1>" + chatRoomDTO.toString() + "</H1>");
         }
     }
 
-    private void generateSampleData() throws AuthenticationError {
+    private void generateSampleData() throws AuthenticationException {
 
-        ChatRoom chatRoom = new ChatRoom("TestRoom");
-
-        services.getChatRoomService().create(new ChatRoom("TestRoom"));
+        ChatRoomDTO chatRoomDTO = services.getChatRoomService().create(new ChatRoom("TestRoom"));
+        services.getChatRoomService().create(new ChatRoom("TestRoom1"));
         services.getChatRoomService().create(new ChatRoom("test1"));
         services.getChatRoomService().create(new ChatRoom("test2"));
 
-        User user1 = new User("Vasya", "vasya@gmail.com", "pwd");
-        User user2 = new User("Masha", "masha@gmai.com", "pwd1");
+        UserDTO userDTO1 = services.getUserService().register(new User("Vasya", "vasya@gmail.com", "pwd"));
+        UserDTO userDTO2 = services.getUserService().register(new User("Masha", "masha@gmai.com", "pwd1"));
 
-        services.getUserService().register(user1);
-        services.getUserService().register(user2);
+        String token1 = services.getTokenService().login("vasya@gmail.com", "pwd");
+        String token2 = services.getTokenService().login("masha@gmai.com", "pwd1");
 
-        services.getTokenService().login("vasya@gmail.com", "pwd");
-        services.getTokenService().login("masha@gmai.com", "pwd1");
+        services.getChatRoomService().joinToChatRoom(token1, userDTO1.getId(), chatRoomDTO.getId());
 
-        services.getChatRoomService().joinToChatRoom(user1.getToken(), user1.getId(), chatRoom.getId());
-
-        services.getMessageService().sendPrivateMessage(user1.getToken(), "Hello, Masha!", user1.getId(), user2.getId());
-        services.getMessageService().sendPrivateMessage(user1.getToken(), "Hello, Vasya", user1.getId(), user2.getId());
-        services.getMessageService().sendPrivateMessage(user1.getToken(), "How are you?", user1.getId(), user2.getId());
-        services.getMessageService().sendPrivateMessage(user1.getToken(), "I'm fine. And you?", user1.getId(), user2.getId());
+        services.getMessageService().sendPrivateMessage(token1, "Hello, Masha!", userDTO1.getId(), userDTO2.getId());
+        services.getMessageService().sendPrivateMessage(token2, "Hello, Vasya", userDTO1.getId(), userDTO2.getId());
+        services.getMessageService().sendPrivateMessage(token1, "How are you?", userDTO1.getId(), userDTO2.getId());
+        services.getMessageService().sendPrivateMessage(token2, "I'm fine. And you?", userDTO1.getId(), userDTO2.getId());
     }
 }
