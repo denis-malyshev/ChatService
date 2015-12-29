@@ -40,5 +40,9 @@ public class ChatServiceOnSpring {
 
         service.messageService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
         service.messageService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",vasya.getId(),masha.getId());
+
+        //service.messageService.sendPrivateMessage(vasya.getToken(),"Hello, Masha!",masha.getId(),vasya.getId());
+
+        System.out.println(service.chatRoomService.findAll().size());
     }
 }

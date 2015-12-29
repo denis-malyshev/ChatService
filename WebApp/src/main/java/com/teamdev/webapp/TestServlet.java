@@ -6,7 +6,6 @@ import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 
-@WebServlet("/chats")
 public class TestServlet extends HttpServlet {
 
     private ServiceProvider services;
@@ -36,23 +34,11 @@ public class TestServlet extends HttpServlet {
 
         resp.setContentType("text/html;charset=utf-8");
 
-        PrintWriter pw = resp.getWriter();
+        PrintWriter printWriter = resp.getWriter();
 
-
-        if (req.getParameterNames().hasMoreElements() && !req.getParameter("token").isEmpty()) {
-            try {
-                if (services.getTokenService().isValid(req.getParameter("token"))) {
-                    Collection<ChatRoomDto> chatRoomDtos = services.getChatRoomService().findAll();
-                    pw.println("<H1>" + chatRoomDtos.size() + "</H1>");
-                    for (ChatRoomDto chatRoomDto : chatRoomDtos) {
-                        pw.println("<H1>" + chatRoomDto.toString() + "</H1>");
-                    }
-                }
-            } catch (AuthenticationError authenticationError) {
-                authenticationError.printStackTrace();
-            }
-        } else {
-            resp.sendError(403, "Invalid token.");
+        Collection<ChatRoomDto> chatRoomDtos = services.getChatRoomService().findAll();
+        for (ChatRoomDto chatRoomDto : chatRoomDtos) {
+            printWriter.println("<H1>" + chatRoomDto.toString() + "</H1>");
         }
     }
 
@@ -60,7 +46,9 @@ public class TestServlet extends HttpServlet {
 
         ChatRoom chatRoom = new ChatRoom("TestRoom");
 
-        services.getChatRoomService().create(chatRoom);
+        services.getChatRoomService().create(new ChatRoom("TestRoom"));
+        services.getChatRoomService().create(new ChatRoom("test1"));
+        services.getChatRoomService().create(new ChatRoom("test2"));
 
         User user1 = new User("Vasya", "vasya@gmail.com", "pwd");
         User user2 = new User("Masha", "masha@gmai.com", "pwd1");
