@@ -6,26 +6,24 @@ import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import com.teamdev.persistence.dom.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.repository.AuthenticationTokenRepositoryImpl;
+import com.teamdev.persistence.repository.MessageRepositoryImpl;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 
-@Service("authenticationService")
+@Service("tokeService")
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Autowired
+    @Inject
     private AuthenticationTokenRepository tokenRepository;
-    @Autowired
+    @Inject
     private UserRepository userRepository;
     private long count = 0;
 
-    public AuthenticationServiceImpl() {
-    }
+    public AuthenticationServiceImpl(AuthenticationTokenRepositoryImpl tokenRepository, MessageRepositoryImpl messageRepository) {
 
-    public AuthenticationServiceImpl(AuthenticationTokenRepository tokenRepository, UserRepository userRepository) {
-        this.tokenRepository = tokenRepository;
-        this.userRepository = userRepository;
     }
 
     public void login(String userMail, String password) throws AuthenticationError {

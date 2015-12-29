@@ -7,10 +7,12 @@ import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
+import com.teamdev.persistence.repository.ChatRoomRepositoryImpl;
 import com.teamdev.persistence.repository.RepositoryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.repository.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,22 +20,16 @@ import java.util.Iterator;
 @Service("chatService")
 public class ChatRoomServiceImpl implements ChatRoomService {
 
-    @Autowired
+    @Inject
     private ChatRoomRepository chatRoomRepository;
-    @Autowired
+    @Inject
     private UserRepository userRepository;
-    @Autowired
+    @Inject
     private AuthenticationServiceImpl authenticationService;
     private long count = 0;
 
-    public ChatRoomServiceImpl() {
-    }
+    public ChatRoomServiceImpl(ChatRoomRepositoryImpl chatRoomRepository, UserRepositoryImpl userRepository, AuthenticationServiceImpl authenticationService) {
 
-    public ChatRoomServiceImpl(RepositoryFactory repositoryFactory,
-                               AuthenticationServiceImpl authenticationService) {
-        this.chatRoomRepository = repositoryFactory.getChatRoomRepository();
-        this.authenticationService = authenticationService;
-        this.userRepository = repositoryFactory.getUserRepository();
     }
 
     public void create(ChatRoom chatRoom) {

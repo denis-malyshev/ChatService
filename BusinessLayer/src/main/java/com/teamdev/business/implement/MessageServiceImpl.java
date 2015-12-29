@@ -9,28 +9,27 @@ import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.Message;
 import com.teamdev.persistence.dom.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamdev.persistence.repository.MessageRepositoryImpl;
+import com.teamdev.persistence.repository.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 @Service("messageService")
 public class MessageServiceImpl implements MessageService<Message> {
 
-    @Autowired
+    @Inject
     private MessageRepository messageRepository;
-    @Autowired
+    @Inject
     private UserRepository userRepository;
-    @Autowired
+    @Inject
     private ChatRoomRepository chatRoomRepository;
-    @Autowired
+    @Inject
     private AuthenticationService authenticationService;
     private long count = 0;
 
-    public MessageServiceImpl() {
-    }
+    public MessageServiceImpl(MessageRepositoryImpl messageRepository, UserRepositoryImpl userRepository, AuthenticationServiceImpl authenticationService) {
 
-    public MessageServiceImpl(MessageRepository messageRepository, UserRepository userRepository) {
-        this.messageRepository = messageRepository;
-        this.userRepository = userRepository;
     }
 
     public void create(Message message) {

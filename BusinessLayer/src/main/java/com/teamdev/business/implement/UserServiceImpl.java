@@ -6,21 +6,19 @@ import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
 import com.teamdev.persistence.repository.RepositoryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    @Inject
     private UserRepository userRepository;
     private long count = 0;
 
-    public UserServiceImpl() {
-    }
-
-    public UserServiceImpl(RepositoryFactory repositoryFactory) {
-        this.userRepository = repositoryFactory.getUserRepository();
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public void register(User user) throws AuthenticationError {

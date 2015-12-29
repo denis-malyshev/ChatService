@@ -4,8 +4,9 @@ import com.teamdev.business.implement.AuthenticationServiceImpl;
 import com.teamdev.business.implement.ChatRoomServiceImpl;
 import com.teamdev.business.implement.MessageServiceImpl;
 import com.teamdev.business.implement.UserServiceImpl;
+import com.teamdev.business.implement.model.ApplicationConfig;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ServiceProvider {
     private static ServiceProvider ourInstance = new ServiceProvider();
@@ -20,7 +21,7 @@ public class ServiceProvider {
     }
 
     private ServiceProvider() {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("/META-INF/beans.xml");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
         userService = (UserServiceImpl) applicationContext.getBean("userService");
         chatRoomService = (ChatRoomServiceImpl) applicationContext.getBean("chatService");
         tokenService = (AuthenticationServiceImpl) applicationContext.getBean("tokenService");
