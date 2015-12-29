@@ -13,9 +13,9 @@ public class ChatRoom {
 
     private String name;
     @OneToMany
-    private Set<Message> messages = new HashSet<Message>();
+    private Set<Message> messages = new HashSet<>();
     @OneToMany
-    private Set<User> users = new HashSet<User>();
+    private Set<User> users = new HashSet<>();
 
     public ChatRoom() {
     }

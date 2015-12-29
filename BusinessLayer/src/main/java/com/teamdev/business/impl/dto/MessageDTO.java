@@ -3,7 +3,6 @@ package com.teamdev.business.impl.dto;
 import java.time.LocalDateTime;
 
 public class MessageDTO {
-
     private long id;
     private String text;
     private LocalDateTime time;
