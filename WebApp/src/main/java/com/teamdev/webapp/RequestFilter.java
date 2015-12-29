@@ -3,12 +3,10 @@ package com.teamdev.webapp;
 import com.teamdev.business.implement.error.AuthenticationError;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-@WebFilter
 public class RequestFilter implements Filter {
 
     private ServiceProvider services;
@@ -23,20 +21,37 @@ public class RequestFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        if (filterConfig == null) {
+        Map<String, String[]> parameterMap = servletRequest.getParameterMap();
+
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        if (!parameterMap.containsKey("token")) {
+            response.sendError(403, "Can't find the token.");
             return;
         }
-        ServletContext servletContext = filterConfig.getServletContext();
-        String token = servletRequest.getParameter("token");
-        try {
-            if (services.getTokenService().isValid(token)) {
-                RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/chats");
-                dispatcher.forward(servletRequest, servletResponse);
-            } else {
 
+        if (!parameterMap.containsKey("userId")) {
+            response.sendError(403, "Can't find the userId.");
+            return;
+        }
+
+        if (parameterMap.containsKey("token") && parameterMap.containsKey("userId")) {
+
+            String token = parameterMap.get("token")[0];
+            long userId = Long.parseLong(parameterMap.get("userId")[0]);
+            try {
+                if (services.getTokenService().isValid(token) && services.getUserService().findById(userId) != null) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
+            } catch (AuthenticationError authenticationError) {
+
+                if (authenticationError.getMessage().equals("Invalid token key.")) {
+                    response.sendError(403, "Invalid token key.");
+                }
+                if (authenticationError.getMessage().equals("Token has been expired.")) {
+                    response.sendError(403, "Token has been expired.");
+                }
             }
-        } catch (AuthenticationError authenticationError) {
-            authenticationError.printStackTrace();
         }
     }
 
