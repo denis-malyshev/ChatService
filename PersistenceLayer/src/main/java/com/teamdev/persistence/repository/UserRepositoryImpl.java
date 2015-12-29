@@ -13,6 +13,7 @@ import java.util.Map;
 public class UserRepositoryImpl implements UserRepository {
 
     private Map<Long, User> users = new HashMap<>();
+    private long id = 1;
 
     public UserRepositoryImpl() {
     }
@@ -35,6 +36,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public void update(User user) {
+        if (user.getId() == 0) {
+            user.setId(id++);
+        }
         users.put(user.getId(), user);
     }
 

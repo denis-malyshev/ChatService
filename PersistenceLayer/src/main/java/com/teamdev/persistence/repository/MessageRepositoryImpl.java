@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class MessageRepositoryImpl implements MessageRepository {
 
     private Map<Long, Message> messages = new HashMap<>();
+    private long id = 1;
 
     public Message findById(long id) {
         return messages.get(id);
@@ -26,6 +27,9 @@ public class MessageRepositoryImpl implements MessageRepository {
     }
 
     public void update(Message message) {
+        if (message.getId() == 0) {
+            message.setId(id++);
+        }
         messages.put(message.getId(), message);
     }
 
@@ -34,7 +38,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     }
 
     public Collection<Message> findAllAfter(final LocalDateTime time) {
-        return messages.values().stream().filter(x->x.getTime().equals(time)).collect(Collectors.toList());
+        return messages.values().stream().filter(x -> x.getTime().equals(time)).collect(Collectors.toList());
     }
 
     public int count() {

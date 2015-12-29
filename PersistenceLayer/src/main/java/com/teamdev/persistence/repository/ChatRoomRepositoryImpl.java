@@ -12,6 +12,7 @@ import java.util.Map;
 public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
     private Map<Long, ChatRoom> chatRooms = new HashMap<>();
+    private long id = 1;
 
     public ChatRoomRepositoryImpl() {
     }
@@ -30,6 +31,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     public void update(ChatRoom chatRoom) {
+        if (chatRoom.getId() == 0) {
+            chatRoom.setId(id++);
+        }
         chatRooms.put(chatRoom.getId(), chatRoom);
     }
 
