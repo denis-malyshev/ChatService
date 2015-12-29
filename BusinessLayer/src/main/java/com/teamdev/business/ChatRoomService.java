@@ -1,23 +1,19 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.dto.ChatRoomDto;
-import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.business.impl.dto.ChatRoomDTO;
+import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.persistence.dom.ChatRoom;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
 public interface ChatRoomService {
 
-    @Transactional
-    void create(ChatRoom chatRoom);
+    ChatRoomDTO create(ChatRoom chatRoom);
 
-    @Transactional
-    void joinToChatRoom(String token, long user, long chatRoomId) throws AuthenticationError;
+    void joinToChatRoom(String token, long user, long chatRoomId) throws AuthenticationException;
 
-    @Transactional
-    void leaveChatRoom(String token, long user, long chatRoomId) throws AuthenticationError;
+    void leaveChatRoom(String token, long user, long chatRoomId) throws AuthenticationException;
 
-    Collection<ChatRoomDto> findAll();
+    Collection<ChatRoomDTO> findAll();
 
 }

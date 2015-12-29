@@ -1,11 +1,10 @@
 package com.teamdev.webapp;
 
-import com.teamdev.business.implement.AuthenticationServiceImpl;
-import com.teamdev.business.implement.ChatRoomServiceImpl;
-import com.teamdev.business.implement.MessageServiceImpl;
-import com.teamdev.business.implement.UserServiceImpl;
-import com.teamdev.business.implement.model.ApplicationConfig;
-import org.springframework.context.ApplicationContext;
+import com.teamdev.business.impl.AuthenticationServiceImpl;
+import com.teamdev.business.impl.ChatRoomServiceImpl;
+import com.teamdev.business.impl.MessageServiceImpl;
+import com.teamdev.business.impl.UserServiceImpl;
+import com.teamdev.business.impl.model.ApplicationConfig;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ServiceProvider {
@@ -21,11 +20,13 @@ public class ServiceProvider {
     }
 
     private ServiceProvider() {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-        userService = (UserServiceImpl) applicationContext.getBean("userService");
-        chatRoomService = (ChatRoomServiceImpl) applicationContext.getBean("chatService");
-        tokenService = (AuthenticationServiceImpl) applicationContext.getBean("tokenService");
-        messageService = (MessageServiceImpl) applicationContext.getBean("messageService");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(ApplicationConfig.class);
+        context.refresh();
+        userService = (UserServiceImpl) context.getBean("userService");
+        chatRoomService = (ChatRoomServiceImpl) context.getBean("chatService");
+        tokenService = (AuthenticationServiceImpl) context.getBean("authenticationService");
+        messageService = (MessageServiceImpl) context.getBean("messageService");
     }
 
     public UserServiceImpl getUserService() {

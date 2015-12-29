@@ -1,16 +1,12 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.dto.UserDto;
-import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.business.impl.dto.UserDTO;
+import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.persistence.dom.User;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface UserService {
 
-    @Transactional
-    void register(User user) throws AuthenticationError;
+    UserDTO register(User user) throws AuthenticationException;
 
-    UserDto findById(long userId);
-
-    int count();
+    UserDTO findById(long userId);
 }

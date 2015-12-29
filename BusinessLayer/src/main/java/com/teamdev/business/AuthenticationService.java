@@ -1,10 +1,10 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.business.impl.exception.AuthenticationException;
 
 public interface AuthenticationService {
 
-    void login(String mail, String password) throws AuthenticationError;
+    String login(String mail, String password) throws AuthenticationException;
 
-    boolean isValid(String token) throws AuthenticationError;
+    void validation(String token) throws AuthenticationException;
 }

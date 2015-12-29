@@ -1,16 +1,11 @@
 package com.teamdev.business;
 
-import com.teamdev.business.implement.error.AuthenticationError;
-import org.springframework.transaction.annotation.Transactional;
+import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.persistence.dom.Message;
 
-public interface MessageService<Message> {
+public interface MessageService {
 
-    @Transactional
-    void create(Message message);
+    void sendMessage(String token, String text, long user, long chatRoomId) throws AuthenticationException;
 
-    @Transactional
-    void sendMessage(String token, String text, long user, long chatRoomId) throws AuthenticationError;
-
-    @Transactional
-    void sendPrivateMessage(String token, String text, long senderId, long receiverId) throws AuthenticationError;
+    void sendPrivateMessage(String token, String text, long senderId, long receiverId) throws AuthenticationException;
 }
