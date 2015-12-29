@@ -72,6 +72,7 @@ public class MessageServiceImpl implements MessageService<Message> {
         ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
         if (chatRoom == null) {
             chatRoom = new ChatRoom(chatRoomName);
+            chatRoom.setId(System.nanoTime());
         }
         chatRoom.getUsers().add(sender);
         chatRoom.getUsers().add(receiver);

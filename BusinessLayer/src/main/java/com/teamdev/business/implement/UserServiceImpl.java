@@ -1,6 +1,7 @@
 package com.teamdev.business.implement;
 
 import com.teamdev.business.UserService;
+import com.teamdev.business.implement.dto.UserDto;
 import com.teamdev.business.implement.error.AuthenticationError;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
@@ -29,6 +30,15 @@ public class UserServiceImpl implements UserService {
             }
         user.setId(count++);
         userRepository.update(user);
+    }
+
+    @Override
+    public UserDto findById(long userId) {
+        User user = userRepository.findById(userId);
+        if (user == null)
+            return null;
+        UserDto userDto = new UserDto(userId, user.getFirstName(), user.getMail());
+        return userDto;
     }
 
     @Override
