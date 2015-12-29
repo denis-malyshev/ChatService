@@ -75,7 +75,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         Iterator<ChatRoom> iterator = chatRooms.iterator();
         while (iterator.hasNext()) {
             ChatRoom chat = iterator.next();
-            chatRoomDtos.add(new ChatRoomDto(chat.getName(),chat.getUsers().size(),chat.getMessages().size()));
+            chatRoomDtos.add(new ChatRoomDto(chat.getId(), chat.getName(),chat.getUsers().size(),chat.getMessages().size()));
         }
         return chatRoomDtos;
     }
