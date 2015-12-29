@@ -1,6 +1,6 @@
 package com.teamdev.webapp;
 
-import com.teamdev.business.implement.error.AuthenticationError;
+import com.teamdev.business.impl.exception.AuthenticationException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -44,15 +44,16 @@ public class RequestFilter implements Filter {
         }
 
         try {
-            if (services.getTokenService().isValid(token)) {
-                filterChain.doFilter(servletRequest, servletResponse);
-            }
-        } catch (AuthenticationError authenticationError) {
+            services.getTokenService().validation(token);
 
-            if (authenticationError.getMessage().equals("Invalid token key.")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+
+        } catch (AuthenticationException authenticationException) {
+
+            if (authenticationException.getMessage().equals("Invalid token key.")) {
                 response.sendError(403, "Invalid token key.");
             }
-            if (authenticationError.getMessage().equals("Token has been expired.")) {
+            if (authenticationException.getMessage().equals("Token has been expired.")) {
                 response.sendError(403, "Token has been expired.");
             }
         }
