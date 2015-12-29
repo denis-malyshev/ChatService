@@ -1,13 +1,13 @@
-package com.teamdev.business.implement.dto;
+package com.teamdev.business.impl.dto;
 
-public class ChatRoomDto {
+public class ChatRoomDTO {
 
     private long id;
     private String name;
     private int userCount;
     private long messageCount;
 
-    public ChatRoomDto(long id, String name, int userCount, long messageCount) {
+    public ChatRoomDTO(long id, String name, int userCount, long messageCount) {
         this.id = id;
         this.name = name;
         this.userCount = userCount;
@@ -48,8 +48,9 @@ public class ChatRoomDto {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ChatRoomDto{");
-        sb.append("name='").append(name).append('\'');
+        final StringBuilder sb = new StringBuilder("ChatRoomDTO{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
         sb.append(", userCount=").append(userCount);
         sb.append(", messageCount=").append(messageCount);
         sb.append('}');

@@ -1,12 +1,12 @@
-package com.teamdev.business.implement.dto;
+package com.teamdev.business.impl.dto;
 
-public class UserDto {
+public class UserDTO {
 
     private long id;
     private String firstName;
     private String mail;
 
-    public UserDto(long id, String firstName, String mail) {
+    public UserDTO(long id, String firstName, String mail) {
         this.id = id;
         this.firstName = firstName;
         this.mail = mail;
@@ -38,7 +38,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UserDto{");
+        final StringBuilder sb = new StringBuilder("UserDTO{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", mail='").append(mail).append('\'');
         sb.append('}');
