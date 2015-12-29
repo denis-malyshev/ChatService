@@ -35,22 +35,25 @@ public class RequestFilter implements Filter {
             return;
         }
 
-        if (parameterMap.containsKey("token") && parameterMap.containsKey("userId")) {
+        String token = parameterMap.get("token")[0];
+        long userId = Long.parseLong(parameterMap.get("userId")[0]);
 
-            String token = parameterMap.get("token")[0];
-            long userId = Long.parseLong(parameterMap.get("userId")[0]);
-            try {
-                if (services.getTokenService().isValid(token) && services.getUserService().findById(userId) != null) {
-                    filterChain.doFilter(servletRequest, servletResponse);
-                }
-            } catch (AuthenticationError authenticationError) {
+        if (services.getUserService().findById(userId) == null) {
+            response.sendError(403, "User with this id not existing.");
+            return;
+        }
 
-                if (authenticationError.getMessage().equals("Invalid token key.")) {
-                    response.sendError(403, "Invalid token key.");
-                }
-                if (authenticationError.getMessage().equals("Token has been expired.")) {
-                    response.sendError(403, "Token has been expired.");
-                }
+        try {
+            if (services.getTokenService().isValid(token)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+        } catch (AuthenticationError authenticationError) {
+
+            if (authenticationError.getMessage().equals("Invalid token key.")) {
+                response.sendError(403, "Invalid token key.");
+            }
+            if (authenticationError.getMessage().equals("Token has been expired.")) {
+                response.sendError(403, "Token has been expired.");
             }
         }
     }
