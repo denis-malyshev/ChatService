@@ -2,6 +2,7 @@ package com.teamdev.business.impl;
 
 import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.tinytypes.Token;
 import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
@@ -9,9 +10,7 @@ import com.teamdev.persistence.dom.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
-@Service("authenticationService")
+@Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
@@ -22,8 +21,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationServiceImpl() {
     }
 
-    public String login(String userMail, String password) throws AuthenticationException {
-        User user = userRepository.findByMail(userMail);
+    public Token login(String userEmail, String password) throws AuthenticationException {
+        User user = userRepository.findByMail(userEmail);
         if (user == null) {
             throw new AuthenticationException("Invalid login or password.");
         }
@@ -32,17 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         AuthenticationToken token = generateToken(user.getId());
         user.setToken(token.getKey());
-        return token.getKey();
-    }
-
-    public void validation(String token) throws AuthenticationException {
-        AuthenticationToken innerToken = tokenRepository.findByKey(token);
-        if (innerToken == null) {
-            throw new AuthenticationException("Invalid token key.");
-        }
-        if (innerToken.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
-            throw new AuthenticationException("Token has been expired.");
-        }
+        return new Token(token.getKey());
     }
 
     private AuthenticationToken generateToken(long userId) {

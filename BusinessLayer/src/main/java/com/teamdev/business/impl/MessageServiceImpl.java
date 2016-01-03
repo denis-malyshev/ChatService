@@ -1,8 +1,10 @@
 package com.teamdev.business.impl;
 
-import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.MessageService;
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.tinytypes.ChatRoomId;
+import com.teamdev.business.tinytypes.Token;
+import com.teamdev.business.tinytypes.UserId;
 import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.MessageRepository;
 import com.teamdev.persistence.UserRepository;
@@ -12,7 +14,7 @@ import com.teamdev.persistence.dom.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("messageService")
+@Service
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
@@ -21,19 +23,15 @@ public class MessageServiceImpl implements MessageService {
     private UserRepository userRepository;
     @Autowired
     private ChatRoomRepository chatRoomRepository;
-    @Autowired
-    private AuthenticationService authenticationService;
 
     public MessageServiceImpl() {
     }
 
     @Override
-    public void sendMessage(String token, String text, long userId, long chatRoomId) throws AuthenticationException {
+    public void sendMessage(Token token, UserId userId, ChatRoomId chatRoomId, String text) throws AuthenticationException {
 
-        authenticationService.validation(token);
-
-        User user = userRepository.findById(userId);
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
+        User user = userRepository.findById(userId.getId());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
 
         Message message = new Message(text, user, chatRoom);
 
@@ -44,12 +42,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendPrivateMessage(String token, String text, long senderId, long receiverId) throws AuthenticationException {
+    public void sendPrivateMessage(Token token, UserId senderId, UserId receiverId, String text) throws AuthenticationException {
 
-        authenticationService.validation(token);
-
-        User sender = userRepository.findById(senderId);
-        User receiver = userRepository.findById(receiverId);
+        User sender = userRepository.findById(senderId.getId());
+        User receiver = userRepository.findById(receiverId.getId());
 
         Message message = new Message(text, sender, receiver);
         messageRepository.update(message);

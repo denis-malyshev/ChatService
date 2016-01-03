@@ -1,10 +1,9 @@
 package com.teamdev.business;
 
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.tinytypes.Token;
 
 public interface AuthenticationService {
 
-    String login(String mail, String password) throws AuthenticationException;
-
-    void validation(String token) throws AuthenticationException;
+    Token login(String email, String password) throws AuthenticationException;
 }

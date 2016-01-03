@@ -3,6 +3,9 @@ package com.teamdev.business.impl;
 import com.teamdev.business.ChatRoomService;
 import com.teamdev.business.impl.dto.ChatRoomDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.tinytypes.ChatRoomId;
+import com.teamdev.business.tinytypes.Token;
+import com.teamdev.business.tinytypes.UserId;
 import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.ChatRoom;
@@ -14,15 +17,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-@Service("chatService")
+@Service
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AuthenticationServiceImpl authenticationService;
 
     public ChatRoomServiceImpl() {
     }
@@ -32,28 +33,24 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return new ChatRoomDTO(chatRoom.getId(), chatRoom.getName(), 0, 0);
     }
 
-    public void joinToChatRoom(String token,
-                               long userId, long chatRoomId) throws AuthenticationException {
+    public void joinToChatRoom(Token token,
+                               UserId userId, ChatRoomId chatRoomId) throws AuthenticationException {
 
-        authenticationService.validation(token);
-
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
-        User user = userRepository.findById(userId);
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
+        User user = userRepository.findById(userId.getId());
 
         user.getChatRooms().add(chatRoom);
         chatRoom.getUsers().add(user);
     }
 
-    public void leaveChatRoom(String token,
-                              long userId, long chatRoomId) throws AuthenticationException {
+    public void leaveChatRoom(Token token,
+                              UserId userId, ChatRoomId chatRoomId) throws AuthenticationException {
 
-        authenticationService.validation(token);
-
-        User user = userRepository.findById(userId);
+        User user = userRepository.findById(userId.getId());
         if (user == null) {
             return;
         }
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId);
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
 
         user.getChatRooms().remove(chatRoom);
         chatRoom.getUsers().remove(user);
