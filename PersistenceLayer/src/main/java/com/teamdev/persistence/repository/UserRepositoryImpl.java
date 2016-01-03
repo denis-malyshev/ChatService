@@ -2,7 +2,6 @@ package com.teamdev.persistence.repository;
 
 import com.teamdev.persistence.UserRepository;
 import com.teamdev.persistence.dom.User;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -23,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public User findByMail(String mail) {
-        User user = users.values().stream().filter(x -> x.getMail().equals(mail)).findFirst().orElse(null);
+        User user = users.values().stream().filter(x -> x.getEmail().equals(mail)).findFirst().orElse(null);
         return user;
     }
 

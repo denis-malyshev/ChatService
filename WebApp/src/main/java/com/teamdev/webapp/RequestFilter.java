@@ -1,21 +1,25 @@
 package com.teamdev.webapp;
 
-import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.UserService;
+import com.teamdev.business.tinytypes.Token;
+import com.teamdev.business.tinytypes.UserId;
+import com.teamdev.persistence.AuthenticationTokenRepository;
+import com.teamdev.persistence.dom.AuthenticationToken;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class RequestFilter implements Filter {
 
-    private ServiceProvider services;
-    private FilterConfig filterConfig;
+    private ContextProvider contextProvider;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.filterConfig = filterConfig;
-        services = ServiceProvider.getInstance();
+
+        contextProvider = ContextProvider.getInstance();
     }
 
     @Override
@@ -35,32 +39,34 @@ public class RequestFilter implements Filter {
             return;
         }
 
-        String token = parameterMap.get("token")[0];
-        long userId = Long.parseLong(parameterMap.get("userId")[0]);
+        Token token = new Token(parameterMap.get("token")[0]);
+        UserId userId = new UserId(Long.parseLong(parameterMap.get("userId")[0]));
 
-        if (services.getUserService().findById(userId) == null) {
+        UserService userService = contextProvider.getContext().getBean(UserService.class);
+
+        if (userService.findById(userId) == null) {
             response.sendError(403, "User with this id not existing.");
             return;
         }
 
-        try {
-            services.getTokenService().validation(token);
+        AuthenticationTokenRepository tokenRepository = contextProvider.getContext().getBean(AuthenticationTokenRepository.class);
 
-            filterChain.doFilter(servletRequest, servletResponse);
+        AuthenticationToken innerToken = tokenRepository.findByKey(token.getToken());
 
-        } catch (AuthenticationException authenticationException) {
-
-            if (authenticationException.getMessage().equals("Invalid token key.")) {
-                response.sendError(403, "Invalid token key.");
-            }
-            if (authenticationException.getMessage().equals("Token has been expired.")) {
-                response.sendError(403, "Token has been expired.");
-            }
+        if (innerToken == null || innerToken.getUserId() != userId.getId()) {
+            response.sendError(403, "Invalid token key.");
+            return;
         }
+
+        if (innerToken.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
+            response.sendError(403, "Token has been expired.");
+            return;
+        }
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
     public void destroy() {
-        filterConfig = null;
     }
 }

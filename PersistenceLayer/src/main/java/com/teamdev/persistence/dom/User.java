@@ -14,7 +14,7 @@ public class User {
     private long id;
 
     private String firstName;
-    private String mail;
+    private String email;
     private String password;
 
     private String token;
@@ -26,9 +26,9 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String mail, String password) {
+    public User(String firstName, String email, String password) {
         this.firstName = firstName;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
     }
 
@@ -72,12 +72,12 @@ public class User {
         this.password = password;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<ChatRoom> getChatRooms() {
@@ -111,7 +111,7 @@ public class User {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("id=").append(id);
         sb.append(", firstName=").append(firstName);
-        sb.append(", mail=").append(mail);
+        sb.append(", email=").append(email);
         sb.append('}');
         return sb.toString();
     }

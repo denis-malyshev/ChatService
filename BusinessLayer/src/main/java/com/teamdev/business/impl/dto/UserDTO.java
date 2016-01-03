@@ -4,12 +4,12 @@ public class UserDTO {
 
     private long id;
     private String firstName;
-    private String mail;
+    private String email;
 
-    public UserDTO(long id, String firstName, String mail) {
+    public UserDTO(long id, String firstName, String email) {
         this.id = id;
         this.firstName = firstName;
-        this.mail = mail;
+        this.email = email;
     }
 
     public long getId() {
@@ -28,19 +28,19 @@ public class UserDTO {
         this.firstName = firstName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserDTO{");
         sb.append("firstName='").append(firstName).append('\'');
-        sb.append(", mail='").append(mail).append('\'');
+        sb.append(", email='").append(email).append('\'');
         sb.append('}');
         return sb.toString();
     }

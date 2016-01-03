@@ -1,8 +1,15 @@
 package com.teamdev.webapp;
 
+import com.teamdev.business.AuthenticationService;
+import com.teamdev.business.ChatRoomService;
+import com.teamdev.business.MessageService;
+import com.teamdev.business.UserService;
 import com.teamdev.business.impl.dto.ChatRoomDTO;
 import com.teamdev.business.impl.dto.UserDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.tinytypes.ChatRoomId;
+import com.teamdev.business.tinytypes.Token;
+import com.teamdev.business.tinytypes.UserId;
 import com.teamdev.persistence.dom.ChatRoom;
 import com.teamdev.persistence.dom.User;
 
@@ -16,12 +23,12 @@ import java.util.Collection;
 
 public class TestServlet extends HttpServlet {
 
-    private ServiceProvider services;
+    private ContextProvider contextProvider;
 
     @Override
     public void init() throws ServletException {
 
-        services = ServiceProvider.getInstance();
+        contextProvider = ContextProvider.getInstance();
 
         try {
             generateSampleData();
@@ -37,7 +44,9 @@ public class TestServlet extends HttpServlet {
 
         PrintWriter printWriter = resp.getWriter();
 
-        Collection<ChatRoomDTO> chatRoomDTOs = services.getChatRoomService().findAll();
+        ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
+
+        Collection<ChatRoomDTO> chatRoomDTOs = chatRoomService.findAll();
         for (ChatRoomDTO chatRoomDTO : chatRoomDTOs) {
             printWriter.println("<H1>" + chatRoomDTO.toString() + "</H1>");
         }
@@ -45,22 +54,30 @@ public class TestServlet extends HttpServlet {
 
     private void generateSampleData() throws AuthenticationException {
 
-        ChatRoomDTO chatRoomDTO = services.getChatRoomService().create(new ChatRoom("TestRoom"));
-        services.getChatRoomService().create(new ChatRoom("TestRoom1"));
-        services.getChatRoomService().create(new ChatRoom("test1"));
-        services.getChatRoomService().create(new ChatRoom("test2"));
+        ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
 
-        UserDTO userDTO1 = services.getUserService().register(new User("Vasya", "vasya@gmail.com", "pwd"));
-        UserDTO userDTO2 = services.getUserService().register(new User("Masha", "masha@gmai.com", "pwd1"));
+        ChatRoomDTO chatRoomDTO = chatRoomService.create(new ChatRoom("TestRoom"));
 
-        String token1 = services.getTokenService().login("vasya@gmail.com", "pwd");
-        String token2 = services.getTokenService().login("masha@gmai.com", "pwd1");
+        chatRoomService.create(new ChatRoom("TestRoom1"));
+        chatRoomService.create(new ChatRoom("test1"));
+        chatRoomService.create(new ChatRoom("test2"));
 
-        services.getChatRoomService().joinToChatRoom(token1, userDTO1.getId(), chatRoomDTO.getId());
+        UserService userService = contextProvider.getContext().getBean(UserService.class);
 
-        services.getMessageService().sendPrivateMessage(token1, "Hello, Masha!", userDTO1.getId(), userDTO2.getId());
-        services.getMessageService().sendPrivateMessage(token2, "Hello, Vasya", userDTO1.getId(), userDTO2.getId());
-        services.getMessageService().sendPrivateMessage(token1, "How are you?", userDTO1.getId(), userDTO2.getId());
-        services.getMessageService().sendPrivateMessage(token2, "I'm fine. And you?", userDTO1.getId(), userDTO2.getId());
+        UserDTO userDTO1 = userService.register(new User("Vasya", "vasya@gmail.com", "pwd"));
+        UserDTO userDTO2 = userService.register(new User("Masha", "masha@gmai.com", "pwd1"));
+
+        AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
+
+        Token token1 = tokenService.login("vasya@gmail.com", "pwd");
+
+        UserId id1 = new UserId(userDTO1.getId());
+        UserId id2 = new UserId(userDTO2.getId());
+
+        chatRoomService.joinToChatRoom(token1, new UserId(userDTO1.getId()), new ChatRoomId(chatRoomDTO.getId()));
+
+        MessageService messageService = contextProvider.getContext().getBean(MessageService.class);
+
+        messageService.sendPrivateMessage(token1, id1, id2, "Hello, Masha!");
     }
 }
