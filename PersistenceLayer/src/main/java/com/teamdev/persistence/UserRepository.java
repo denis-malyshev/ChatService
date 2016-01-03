@@ -6,5 +6,5 @@ public interface UserRepository extends Repository<User> {
 
     User findByMail(String mail);
 
-    int count();
+    int userCount();
 }

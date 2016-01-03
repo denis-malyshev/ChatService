@@ -12,5 +12,5 @@ public interface MessageRepository extends Repository<Message> {
 
     Collection<Message> findAllAfter(LocalDateTime time);
 
-    int count();
+    int messageCount();
 }

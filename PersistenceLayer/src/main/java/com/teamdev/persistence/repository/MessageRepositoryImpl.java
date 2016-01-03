@@ -41,7 +41,7 @@ public class MessageRepositoryImpl implements MessageRepository {
         return messages.values().stream().filter(x -> x.getTime().equals(time)).collect(Collectors.toList());
     }
 
-    public int count() {
+    public int messageCount() {
         return messages.size();
     }
 

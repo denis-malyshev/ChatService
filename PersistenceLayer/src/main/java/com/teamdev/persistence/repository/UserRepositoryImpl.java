@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
         return users.values();
     }
 
-    public int count() {
+    public int userCount() {
         return users.size();
     }
 

@@ -7,11 +7,10 @@ import com.teamdev.business.UserService;
 import com.teamdev.business.impl.dto.ChatRoomDTO;
 import com.teamdev.business.impl.dto.UserDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
-import com.teamdev.business.tinytypes.ChatRoomId;
-import com.teamdev.business.tinytypes.Token;
-import com.teamdev.business.tinytypes.UserId;
-import com.teamdev.persistence.dom.ChatRoom;
-import com.teamdev.persistence.dom.User;
+import com.teamdev.business.impl.exception.ChatRoomAlreadyExistsException;
+import com.teamdev.business.impl.exception.ChatRoomNotFoundException;
+import com.teamdev.business.impl.exception.UserNotFoundException;
+import com.teamdev.business.tinytypes.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,9 +31,16 @@ public class TestServlet extends HttpServlet {
 
         try {
             generateSampleData();
-        } catch (AuthenticationException authenticationException) {
-            authenticationException.printStackTrace();
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+        } catch (ChatRoomAlreadyExistsException e) {
+            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        } catch (ChatRoomNotFoundException e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override
@@ -52,24 +58,24 @@ public class TestServlet extends HttpServlet {
         }
     }
 
-    private void generateSampleData() throws AuthenticationException {
+    private void generateSampleData() throws AuthenticationException, ChatRoomAlreadyExistsException, UserNotFoundException, ChatRoomNotFoundException {
 
         ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
 
-        ChatRoomDTO chatRoomDTO = chatRoomService.create(new ChatRoom("TestRoom"));
+        ChatRoomDTO chatRoomDTO = chatRoomService.create("TestRoom");
 
-        chatRoomService.create(new ChatRoom("TestRoom1"));
-        chatRoomService.create(new ChatRoom("test1"));
-        chatRoomService.create(new ChatRoom("test2"));
+        chatRoomService.create("TestRoom1");
+        chatRoomService.create("test1");
+        chatRoomService.create("test2");
 
         UserService userService = contextProvider.getContext().getBean(UserService.class);
 
-        UserDTO userDTO1 = userService.register(new User("Vasya", "vasya@gmail.com", "pwd"));
-        UserDTO userDTO2 = userService.register(new User("Masha", "masha@gmai.com", "pwd1"));
+        UserDTO userDTO1 = userService.register(new UserName("Vasya"), new UserEmail("vasya@gmail.com"), new UserPassword("pwd"));
+        UserDTO userDTO2 = userService.register(new UserName("Masha"), new UserEmail("masha@gmail.com"), new UserPassword("pwd1"));
 
         AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
 
-        Token token1 = tokenService.login("vasya@gmail.com", "pwd");
+        Token token1 = tokenService.login(new UserEmail(userDTO1.getEmail()), new UserPassword("pwd"));
 
         UserId id1 = new UserId(userDTO1.getId());
         UserId id2 = new UserId(userDTO2.getId());

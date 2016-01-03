@@ -1,7 +1,10 @@
 package com.teamdev.business.impl;
 
 import com.teamdev.business.MessageService;
+import com.teamdev.business.impl.dto.MessageDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
+import com.teamdev.business.impl.exception.ChatRoomNotFoundException;
+import com.teamdev.business.impl.exception.UserNotFoundException;
 import com.teamdev.business.tinytypes.ChatRoomId;
 import com.teamdev.business.tinytypes.Token;
 import com.teamdev.business.tinytypes.UserId;
@@ -28,10 +31,19 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendMessage(Token token, UserId userId, ChatRoomId chatRoomId, String text) throws AuthenticationException {
+    public MessageDTO sendMessage(Token token, UserId userId, ChatRoomId chatRoomId, String text)
+            throws AuthenticationException, UserNotFoundException, ChatRoomNotFoundException {
 
         User user = userRepository.findById(userId.getId());
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
+
+        if (user == null) {
+            throw new UserNotFoundException("User with this id [" + userId.getId() + "] not exists.");
+        }
+
+        if (chatRoom == null) {
+            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.getId() + "] not exists.");
+        }
 
         Message message = new Message(text, user, chatRoom);
 
@@ -39,21 +51,29 @@ public class MessageServiceImpl implements MessageService {
 
         user.getMessages().add(message);
         chatRoom.getMessages().add(message);
+
+        return new MessageDTO(message.getId(), message.getText(), message.getTime());
     }
 
     @Override
-    public void sendPrivateMessage(Token token, UserId senderId, UserId receiverId, String text) throws AuthenticationException {
+    public MessageDTO sendPrivateMessage(Token token, UserId senderId, UserId receiverId, String text)
+            throws AuthenticationException, UserNotFoundException {
 
         User sender = userRepository.findById(senderId.getId());
         User receiver = userRepository.findById(receiverId.getId());
 
+        if (sender == null) {
+            throw new UserNotFoundException("User with this id [" + receiverId.getId() + "] not exists.");
+        }
+
+        if (receiver == null) {
+            throw new UserNotFoundException("User with this id [" + receiverId.getId() + "] not exists.");
+        }
+
         Message message = new Message(text, sender, receiver);
         messageRepository.update(message);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append("private-room-").append(senderId).append(receiverId);
-
-        String chatRoomName = builder.toString();
+        String chatRoomName = "private-room-" + senderId + receiverId;
         ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
         if (chatRoom == null) {
             chatRoom = new ChatRoom(chatRoomName);
@@ -65,5 +85,7 @@ public class MessageServiceImpl implements MessageService {
 
         sender.getMessages().add(message);
         receiver.getMessages().add(message);
+
+        return new MessageDTO(message.getId(), message.getText(), message.getTime());
     }
 }

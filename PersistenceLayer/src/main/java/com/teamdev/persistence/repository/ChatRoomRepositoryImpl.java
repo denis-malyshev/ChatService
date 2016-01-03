@@ -37,6 +37,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
         chatRooms.put(chatRoom.getId(), chatRoom);
     }
 
+    @Override
+    public int chatRoomCount() {
+        return chatRooms.size();
+    }
+
     public void delete(long id) {
         chatRooms.remove(id);
     }
