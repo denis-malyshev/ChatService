@@ -6,6 +6,7 @@ import com.teamdev.business.tinytypes.UserId;
 import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -27,7 +28,7 @@ public class AuthenticationAspect {
     }
 
     @Around("authPointcut()")
-    public void authentication(JoinPoint joinPoint) throws Throwable {
+    public void authentication(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Token token = (Token) joinPoint.getArgs()[0];
         UserId userId = (UserId) joinPoint.getArgs()[1];
@@ -37,9 +38,10 @@ public class AuthenticationAspect {
         if (innerToken == null || innerToken.getUserId() != userId.getId()) {
             throw new AuthenticationException("Invalid token.");
         }
-
         if (innerToken.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
             throw new AuthenticationException("Token has been expired.");
         }
+
+        joinPoint.proceed();
     }
 }
