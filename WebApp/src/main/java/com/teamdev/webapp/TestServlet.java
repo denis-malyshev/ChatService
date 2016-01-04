@@ -1,5 +1,7 @@
 package com.teamdev.webapp;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.ChatRoomService;
 import com.teamdev.business.MessageService;
@@ -46,16 +48,18 @@ public class TestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        resp.setContentType("text/html;charset=utf-8");
+
+        resp.setContentType("text/x-json;charset=UTF-8");
 
         PrintWriter printWriter = resp.getWriter();
 
         ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
 
         Collection<ChatRoomDTO> chatRoomDTOs = chatRoomService.findAll();
-        for (ChatRoomDTO chatRoomDTO : chatRoomDTOs) {
-            printWriter.println("<H1>" + chatRoomDTO.toString() + "</H1>");
-        }
+
+        String json = toJson(chatRoomDTOs);
+
+        printWriter.write(json);
     }
 
     private void generateSampleData() throws AuthenticationException, ChatRoomAlreadyExistsException, UserNotFoundException, ChatRoomNotFoundException {
@@ -63,10 +67,6 @@ public class TestServlet extends HttpServlet {
         ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
 
         ChatRoomDTO chatRoomDTO = chatRoomService.create("TestRoom");
-
-        chatRoomService.create("TestRoom1");
-        chatRoomService.create("test1");
-        chatRoomService.create("test2");
 
         UserService userService = contextProvider.getContext().getBean(UserService.class);
 
@@ -85,5 +85,11 @@ public class TestServlet extends HttpServlet {
         MessageService messageService = contextProvider.getContext().getBean(MessageService.class);
 
         messageService.sendPrivateMessage(token1, id1, id2, "Hello, Masha!");
+    }
+
+    private String toJson(Collection<ChatRoomDTO> chatRoomDTOs) {
+
+        Gson gson = new Gson();
+        return gson.toJson(chatRoomDTOs);
     }
 }
