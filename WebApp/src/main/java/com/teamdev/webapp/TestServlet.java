@@ -1,7 +1,6 @@
 package com.teamdev.webapp;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.ChatRoomService;
 import com.teamdev.business.MessageService;
@@ -49,7 +48,7 @@ public class TestServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        resp.setContentType("text/x-json;charset=UTF-8");
+        resp.setContentType("application/json;charset=UTF-8");
 
         PrintWriter printWriter = resp.getWriter();
 

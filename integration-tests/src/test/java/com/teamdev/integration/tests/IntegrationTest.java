@@ -25,9 +25,7 @@ public class IntegrationTest {
     public void setUp() throws Exception {
 
         httpClient = HttpClients.createDefault();
-        StringBuilder tokenBuilder = new StringBuilder();
-        tokenBuilder.append(LocalDateTime.now().getDayOfYear()).append(validUserId);
-        validTokenKey = tokenBuilder.toString();
+        validTokenKey = String.valueOf(LocalDateTime.now().getDayOfYear()) + validUserId;
     }
 
     @Test
@@ -47,6 +45,7 @@ public class IntegrationTest {
 
         request = new HttpGet("http://localhost:8080/chats?token=999&userId=999");
         HttpResponse response = httpClient.execute(request);
+        response.getEntity().getContentType().getValue();
         int result = response.getStatusLine().getStatusCode();
         assertEquals(403, result);
     }
