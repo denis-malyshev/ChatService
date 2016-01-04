@@ -54,7 +54,7 @@ public class RequestFilter implements Filter {
         AuthenticationToken innerToken = tokenRepository.findByKey(token.getToken());
 
         if (innerToken == null || innerToken.getUserId() != userId.getId()) {
-            response.sendError(403, "Invalid token key.");
+            response.sendError(403, "Access denied.");
             return;
         }
 

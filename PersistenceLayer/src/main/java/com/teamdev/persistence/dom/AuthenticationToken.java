@@ -21,7 +21,7 @@ public class AuthenticationToken {
         this.expirationTime = LocalDateTime.now().plusMinutes(15l);
         this.userId = userId;
         //this.key = (System.nanoTime() * Math.random() + userId) + "";
-        this.key = LocalDateTime.now().getMinute() + "" + userId;
+        this.key = LocalDateTime.now().getDayOfYear() + "" + userId;
     }
 
     public long getId() {
