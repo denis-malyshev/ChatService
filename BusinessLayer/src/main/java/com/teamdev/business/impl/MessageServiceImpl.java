@@ -73,7 +73,7 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message(text, sender, receiver);
         messageRepository.update(message);
 
-        String chatRoomName = "private-room-" + senderId + receiverId;
+        String chatRoomName = "private-room-" + senderId.getId() + receiverId.getId();
         ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
         if (chatRoom == null) {
             chatRoom = new ChatRoom(chatRoomName);

@@ -18,6 +18,7 @@
         <module>BusinessLayer</module>
         <module>PersistenceLayer</module>
         <module>WebApp</module>
+        <module>integration-tests</module>
     </modules>
 
 </project>
