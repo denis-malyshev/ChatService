@@ -1,5 +1,7 @@
 package com.teamdev.business.impl;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.teamdev.business.UserService;
 import com.teamdev.business.impl.dto.UserDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
@@ -12,11 +14,15 @@ import com.teamdev.persistence.dom.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private HashFunction hashFunction = Hashing.md5();
 
     public UserServiceImpl() {
     }
@@ -27,7 +33,9 @@ public class UserServiceImpl implements UserService {
             throw new AuthenticationException("User with the same mail already exists.");
         }
 
-        User user = new User(name.getName(), email.getEmail(), password.getPassword());
+        String passwordHash = hashFunction.newHasher().putString(password.getPassword(), Charset.defaultCharset()).hash().toString();
+
+        User user = new User(name.getName(), email.getEmail(), passwordHash);
         userRepository.update(user);
         return new UserDTO(user.getId(), user.getFirstName(), user.getEmail());
     }

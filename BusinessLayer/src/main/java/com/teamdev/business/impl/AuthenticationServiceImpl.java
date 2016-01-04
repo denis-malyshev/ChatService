@@ -1,5 +1,7 @@
 package com.teamdev.business.impl;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.business.tinytypes.Token;
@@ -12,6 +14,8 @@ import com.teamdev.persistence.dom.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
+
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -20,13 +24,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private UserRepository userRepository;
 
+    private HashFunction hashFunction = Hashing.md5();
+
     public AuthenticationServiceImpl() {
     }
 
     public Token login(UserEmail userEmail, UserPassword password) throws AuthenticationException {
+
         User user = userRepository.findByMail(userEmail.getEmail());
 
-        if (user == null || !user.getPassword().equals(password.getPassword())) {
+        String passwordHash = hashFunction.newHasher().putString(password.getPassword(), Charset.defaultCharset()).hash().toString();
+
+        if (user == null || !user.getPassword().equals(passwordHash)) {
             throw new AuthenticationException("Invalid login or password.");
         }
 
