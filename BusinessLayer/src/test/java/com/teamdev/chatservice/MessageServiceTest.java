@@ -23,26 +23,24 @@ import static junit.framework.Assert.assertFalse;
 
 public class MessageServiceTest {
 
-    ApplicationContext context;
-    MessageService messageService;
-    MessageRepository messageRepository;
-    UserService userService;
-    ChatRoomRepository chatRoomRepository;
+    private MessageService messageService;
+    private MessageRepository messageRepository;
+    private ChatRoomRepository chatRoomRepository;
 
-    UserId senderId;
-    UserId recipientId;
+    private UserId senderId;
+    private UserId recipientId;
 
-    ChatRoomId chatRoomId;
+    private ChatRoomId chatRoomId;
 
-    Token token;
+    private Token token;
 
     @Before
     public void setUp() throws Exception {
-        context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
         messageService = context.getBean(MessageService.class);
         messageRepository = context.getBean(MessageRepository.class);
-        userService = context.getBean(UserService.class);
+        UserService userService = context.getBean(UserService.class);
         chatRoomRepository = context.getBean(ChatRoomRepository.class);
 
         ChatRoom chatRoom = new ChatRoom("test-chat");
@@ -65,7 +63,8 @@ public class MessageServiceTest {
         senderId = new UserId(userDTO1.getId());
         recipientId = new UserId(userDTO2.getId());
 
-        token = context.getBean(AuthenticationService.class).login(new UserEmail(userDTO1.getEmail()), new UserPassword("pwd1"));
+        AuthenticationService tokenService = context.getBean(AuthenticationService.class);
+        token = tokenService.login(new UserEmail(userDTO1.getEmail()), new UserPassword("pwd1"));
     }
 
     @Test

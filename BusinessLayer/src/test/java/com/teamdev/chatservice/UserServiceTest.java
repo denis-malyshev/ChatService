@@ -21,22 +21,19 @@ import static org.junit.Assert.fail;
 
 public class UserServiceTest {
 
-    ApplicationContext context;
-    UserService userService;
-    UserRepository userRepository;
+    private UserService userService;
+    private UserRepository userRepository;
 
-    User user1;
-    User user2;
+    private User user1;
 
     @Before
     public void setUp() throws Exception {
 
-        context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
         userService = context.getBean(UserService.class);
         userRepository = context.getBean(UserRepository.class);
         user1 = new User("Vasya", "vasya@gmail.com", "pwd1");
-        user2 = new User("Masha", "masha@gmail.com", "pwd");
     }
 
     @Test

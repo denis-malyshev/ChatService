@@ -25,25 +25,22 @@ import static junit.framework.Assert.*;
 
 public class ChatRoomServiceTest {
 
-    ApplicationContext context;
-    ChatRoomService chatRoomService;
-    ChatRoomRepository chatRoomRepository;
-    UserRepository userRepository;
-    AuthenticationTokenRepository tokenRepository;
-    User user;
-    UserId userId;
-    Token token;
-    ChatRoomId chatRoomId;
+    private ChatRoomService chatRoomService;
+    private ChatRoomRepository chatRoomRepository;
+    private User user;
+    private UserId userId;
+    private Token token;
+    private ChatRoomId chatRoomId;
 
     @Before
     public void setUp() throws Exception {
 
-        context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
 
         chatRoomService = context.getBean(ChatRoomService.class);
         chatRoomRepository = context.getBean(ChatRoomRepository.class);
-        userRepository = context.getBean(UserRepository.class);
-        tokenRepository = context.getBean(AuthenticationTokenRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        AuthenticationTokenRepository tokenRepository = context.getBean(AuthenticationTokenRepository.class);
 
         user = new User("Vasya", "vasya@gmail.com", "pwd");
         userRepository.update(user);
