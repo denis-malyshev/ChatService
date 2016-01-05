@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 public class TestServlet extends HttpServlet {
 
@@ -52,11 +54,15 @@ public class TestServlet extends HttpServlet {
 
         PrintWriter printWriter = resp.getWriter();
 
-        ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
+        Map<String, String[]> parameterMap = req.getParameterMap();
 
-        Collection<ChatRoomDTO> chatRoomDTOs = chatRoomService.findAll();
+        UserId userId = new UserId(Long.parseLong(parameterMap.get("userId")[0]));
 
-        String json = toJson(chatRoomDTOs);
+        UserService userService = contextProvider.getContext().getBean(UserService.class);
+
+        Set<ChatRoomDTO> availableChats = userService.findAvailableChats(userId);
+
+        String json = toJson(availableChats);
 
         printWriter.write(json);
     }

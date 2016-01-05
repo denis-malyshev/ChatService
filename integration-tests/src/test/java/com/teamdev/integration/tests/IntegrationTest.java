@@ -36,8 +36,7 @@ public class IntegrationTest {
 
         String result = contentToString(response);
 
-        assertEquals("[{\"id\":1,\"name\":\"TestRoom\",\"userCount\":1,\"messageCount\":0}," +
-                "{\"id\":2,\"name\":\"private-room-12\",\"userCount\":2,\"messageCount\":1}]", result);
+        assertEquals("[{\"id\":1,\"name\":\"TestRoom\",\"userCount\":1,\"messageCount\":0}]", result);
     }
 
     @Test
