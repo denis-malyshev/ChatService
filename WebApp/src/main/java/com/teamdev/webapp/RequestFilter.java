@@ -1,15 +1,14 @@
 package com.teamdev.webapp;
 
+import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.UserService;
 import com.teamdev.business.impl.dto.Token;
 import com.teamdev.business.impl.dto.UserId;
-import com.teamdev.persistence.AuthenticationTokenRepository;
-import com.teamdev.persistence.dom.AuthenticationToken;
+import com.teamdev.business.impl.exception.AuthenticationException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public class RequestFilter implements Filter {
@@ -49,18 +48,21 @@ public class RequestFilter implements Filter {
             return;
         }
 
-        AuthenticationTokenRepository tokenRepository = contextProvider.getContext().getBean(AuthenticationTokenRepository.class);
+        AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
 
-        AuthenticationToken innerToken = tokenRepository.findByKey(token.key);
+        try {
+            tokenService.validation(token, userId);
+        } catch (AuthenticationException e) {
 
-        if (innerToken == null || innerToken.getUserId() != userId.id) {
-            response.sendError(403, "Access denied.");
-            return;
-        }
+            if (e.getMessage().equals("Invalid token.")) {
+                response.sendError(403, "Access denied.");
+                return;
+            }
 
-        if (innerToken.getExpirationTime().compareTo(LocalDateTime.now()) < 1) {
-            response.sendError(403, "Token has been expired.");
-            return;
+            if (e.getMessage().equals("Token has been expired.")) {
+                response.sendError(403, "Token has been expired.");
+                return;
+            }
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
