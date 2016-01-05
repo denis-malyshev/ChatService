@@ -50,11 +50,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         User user = userRepository.findById(userId.id);
 
         if (user == null) {
-            throw new UserNotFoundException("User with this id [" + userId.id + "] not exists.");
+            throw new UserNotFoundException(String.format("User with this id [%d] not exists.", userId.id));
         }
 
         if (chatRoom == null) {
-            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.id + "] not exists.");
+            throw new ChatRoomNotFoundException(String.format("ChatRoom with this id [%d] not exists.", chatRoomId.id));
         }
 
         user.getChatRooms().add(chatRoom);
@@ -75,7 +75,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.id);
 
         if (chatRoom == null) {
-            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.id + "] not exists.");
+            throw new ChatRoomNotFoundException(String.format("ChatRoom with this id [%d] not exists.", chatRoomId.id));
         }
 
         user.getChatRooms().remove(chatRoom);

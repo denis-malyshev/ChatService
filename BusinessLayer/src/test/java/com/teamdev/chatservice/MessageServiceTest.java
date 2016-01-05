@@ -24,7 +24,6 @@ public class MessageServiceTest {
 
     private MessageService messageService;
     private MessageRepository messageRepository;
-    private ChatRoomRepository chatRoomRepository;
 
     private UserId senderId;
     private UserId recipientId;
@@ -40,7 +39,7 @@ public class MessageServiceTest {
         messageService = context.getBean(MessageService.class);
         messageRepository = context.getBean(MessageRepository.class);
         UserService userService = context.getBean(UserService.class);
-        chatRoomRepository = context.getBean(ChatRoomRepository.class);
+        ChatRoomRepository chatRoomRepository = context.getBean(ChatRoomRepository.class);
 
         ChatRoom chatRoom = new ChatRoom("test-chat");
         chatRoomRepository.update(chatRoom);
@@ -79,14 +78,6 @@ public class MessageServiceTest {
 
         messageService.sendPrivateMessage(token, senderId, recipientId, "Hello, Masha!");
         boolean result = messageRepository.findAll().isEmpty();
-        assertFalse(result);
-    }
-
-    @Test
-    public void testSendPrivateMessage_ChatRoomRepositoryCanNotBeEmpty() throws Exception {
-
-        messageService.sendPrivateMessage(token, senderId, recipientId, "Hello, Masha!");
-        boolean result = chatRoomRepository.findAll().isEmpty();
         assertFalse(result);
     }
 

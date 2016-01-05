@@ -1,13 +1,13 @@
 package com.teamdev.business.impl;
 
 import com.teamdev.business.MessageService;
+import com.teamdev.business.impl.dto.ChatRoomId;
 import com.teamdev.business.impl.dto.MessageDTO;
+import com.teamdev.business.impl.dto.Token;
+import com.teamdev.business.impl.dto.UserId;
 import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.business.impl.exception.ChatRoomNotFoundException;
 import com.teamdev.business.impl.exception.UserNotFoundException;
-import com.teamdev.business.impl.dto.ChatRoomId;
-import com.teamdev.business.impl.dto.Token;
-import com.teamdev.business.impl.dto.UserId;
 import com.teamdev.persistence.ChatRoomRepository;
 import com.teamdev.persistence.MessageRepository;
 import com.teamdev.persistence.UserRepository;
@@ -38,11 +38,11 @@ public class MessageServiceImpl implements MessageService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.id);
 
         if (user == null) {
-            throw new UserNotFoundException("User with this id [" + userId.id + "] not exists.");
+            throw new UserNotFoundException(String.format("User with this id [%d] not exists.", userId.id));
         }
 
         if (chatRoom == null) {
-            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.id + "] not exists.");
+            throw new ChatRoomNotFoundException(String.format("ChatRoom with this id [%d] not exists.", chatRoomId.id));
         }
 
         Message message = new Message(text, user, chatRoom);
@@ -63,25 +63,15 @@ public class MessageServiceImpl implements MessageService {
         User receiver = userRepository.findById(receiverId.id);
 
         if (sender == null) {
-            throw new UserNotFoundException("User with this id [" + receiverId.id + "] not exists.");
+            throw new UserNotFoundException(String.format("User with this id [%d] not exists.", senderId.id));
         }
 
         if (receiver == null) {
-            throw new UserNotFoundException("User with this id [" + receiverId.id + "] not exists.");
+            throw new UserNotFoundException(String.format("User with this id [%d] not exists.", receiverId.id));
         }
 
         Message message = new Message(text, sender, receiver);
         messageRepository.update(message);
-
-        String chatRoomName = "private-room-" + senderId.id + receiverId.id;
-        ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
-        if (chatRoom == null) {
-            chatRoom = new ChatRoom(chatRoomName);
-        }
-        chatRoom.getUsers().add(sender);
-        chatRoom.getUsers().add(receiver);
-        chatRoom.getMessages().add(message);
-        chatRoomRepository.update(chatRoom);
 
         sender.getMessages().add(message);
         receiver.getMessages().add(message);
