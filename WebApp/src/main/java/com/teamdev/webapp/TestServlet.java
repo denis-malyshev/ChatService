@@ -23,12 +23,12 @@ import java.util.Set;
 
 public class TestServlet extends HttpServlet {
 
-    private ContextProvider contextProvider;
+    private BeanProvider beanProvider;
 
     @Override
     public void init() throws ServletException {
 
-        contextProvider = ContextProvider.getInstance();
+        beanProvider = BeanProvider.getInstance();
 
         try {
             generateSampleData();
@@ -56,7 +56,7 @@ public class TestServlet extends HttpServlet {
 
         UserId userId = new UserId(Long.parseLong(parameterMap.get("userId")[0]));
 
-        UserService userService = contextProvider.getContext().getBean(UserService.class);
+        UserService userService = beanProvider.getBean(UserService.class);
 
         Set<ChatRoomDTO> availableChats = userService.findAvailableChats(userId);
 
@@ -67,16 +67,16 @@ public class TestServlet extends HttpServlet {
 
     private void generateSampleData() throws AuthenticationException, ChatRoomAlreadyExistsException, UserNotFoundException, ChatRoomNotFoundException {
 
-        ChatRoomService chatRoomService = contextProvider.getContext().getBean(ChatRoomService.class);
+        ChatRoomService chatRoomService = beanProvider.getBean(ChatRoomService.class);
 
         ChatRoomDTO chatRoomDTO = chatRoomService.create("TestRoom");
 
-        UserService userService = contextProvider.getContext().getBean(UserService.class);
+        UserService userService = beanProvider.getBean(UserService.class);
 
         UserDTO userDTO1 = userService.register(new UserName("Vasya"), new UserEmail("vasya@gmail.com"), new UserPassword("pwd"));
         UserDTO userDTO2 = userService.register(new UserName("Masha"), new UserEmail("masha@gmail.com"), new UserPassword("pwd1"));
 
-        AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
+        AuthenticationService tokenService = beanProvider.getBean(AuthenticationService.class);
 
         Token token1 = tokenService.login(new UserEmail(userDTO1.email), new UserPassword("pwd"));
 
@@ -85,7 +85,7 @@ public class TestServlet extends HttpServlet {
 
         chatRoomService.joinToChatRoom(token1, new UserId(userDTO1.id), new ChatRoomId(chatRoomDTO.id));
 
-        MessageService messageService = contextProvider.getContext().getBean(MessageService.class);
+        MessageService messageService = beanProvider.getBean(MessageService.class);
 
         messageService.sendPrivateMessage(token1, id1, id2, "Hello, Masha!");
     }

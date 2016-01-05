@@ -13,12 +13,12 @@ import java.util.Map;
 
 public class RequestFilter implements Filter {
 
-    private ContextProvider contextProvider;
+    private BeanProvider beanProvider;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
-        contextProvider = ContextProvider.getInstance();
+        beanProvider = BeanProvider.getInstance();
     }
 
     @Override
@@ -41,14 +41,14 @@ public class RequestFilter implements Filter {
         Token token = new Token(parameterMap.get("token")[0]);
         UserId userId = new UserId(Long.parseLong(parameterMap.get("userId")[0]));
 
-        UserService userService = contextProvider.getContext().getBean(UserService.class);
+        UserService userService = beanProvider.getBean(UserService.class);
 
         if (userService.findById(userId) == null) {
             response.sendError(403, "User with this id not existing.");
             return;
         }
 
-        AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
+        AuthenticationService tokenService = beanProvider.getBean(AuthenticationService.class);
 
         try {
             tokenService.validation(token, userId);
