@@ -1,4 +1,4 @@
-package com.teamdev.business.tinytypes;
+package com.teamdev.business.impl.dto;
 
 public class UserId {
 

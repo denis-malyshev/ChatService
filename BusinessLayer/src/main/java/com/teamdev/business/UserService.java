@@ -3,10 +3,10 @@ package com.teamdev.business;
 import com.teamdev.business.impl.dto.ChatRoomDTO;
 import com.teamdev.business.impl.dto.UserDTO;
 import com.teamdev.business.impl.exception.AuthenticationException;
-import com.teamdev.business.tinytypes.UserEmail;
-import com.teamdev.business.tinytypes.UserId;
-import com.teamdev.business.tinytypes.UserName;
-import com.teamdev.business.tinytypes.UserPassword;
+import com.teamdev.business.impl.dto.UserEmail;
+import com.teamdev.business.impl.dto.UserId;
+import com.teamdev.business.impl.dto.UserName;
+import com.teamdev.business.impl.dto.UserPassword;
 
 import java.util.Set;
 

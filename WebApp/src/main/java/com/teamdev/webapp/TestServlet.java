@@ -5,13 +5,11 @@ import com.teamdev.business.AuthenticationService;
 import com.teamdev.business.ChatRoomService;
 import com.teamdev.business.MessageService;
 import com.teamdev.business.UserService;
-import com.teamdev.business.impl.dto.ChatRoomDTO;
-import com.teamdev.business.impl.dto.UserDTO;
+import com.teamdev.business.impl.dto.*;
 import com.teamdev.business.impl.exception.AuthenticationException;
 import com.teamdev.business.impl.exception.ChatRoomAlreadyExistsException;
 import com.teamdev.business.impl.exception.ChatRoomNotFoundException;
 import com.teamdev.business.impl.exception.UserNotFoundException;
-import com.teamdev.business.tinytypes.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

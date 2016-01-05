@@ -1,8 +1,8 @@
 package com.teamdev.business.impl.aspect;
 
 import com.teamdev.business.impl.exception.AuthenticationException;
-import com.teamdev.business.tinytypes.Token;
-import com.teamdev.business.tinytypes.UserId;
+import com.teamdev.business.impl.dto.Token;
+import com.teamdev.business.impl.dto.UserId;
 import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,7 +22,7 @@ public class AuthenticationAspect {
     private AuthenticationTokenRepository tokenRepository;
 
     @Pointcut("execution (* com.teamdev.business.*.*" +
-            "(com.teamdev.business.tinytypes.Token,com.teamdev.business.tinytypes.UserId,..))")
+            "(com.teamdev.business.impl.dto.Token,com.teamdev.business.impl.dto.UserId,..))")
     private void authPointcut() {
     }
 

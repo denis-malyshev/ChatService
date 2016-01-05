@@ -1,8 +1,8 @@
 package com.teamdev.webapp;
 
 import com.teamdev.business.UserService;
-import com.teamdev.business.tinytypes.Token;
-import com.teamdev.business.tinytypes.UserId;
+import com.teamdev.business.impl.dto.Token;
+import com.teamdev.business.impl.dto.UserId;
 import com.teamdev.persistence.AuthenticationTokenRepository;
 import com.teamdev.persistence.dom.AuthenticationToken;
 
