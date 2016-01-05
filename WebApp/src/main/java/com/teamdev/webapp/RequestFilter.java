@@ -51,9 +51,9 @@ public class RequestFilter implements Filter {
 
         AuthenticationTokenRepository tokenRepository = contextProvider.getContext().getBean(AuthenticationTokenRepository.class);
 
-        AuthenticationToken innerToken = tokenRepository.findByKey(token.getToken());
+        AuthenticationToken innerToken = tokenRepository.findByKey(token.key);
 
-        if (innerToken == null || innerToken.getUserId() != userId.getId()) {
+        if (innerToken == null || innerToken.getUserId() != userId.id) {
             response.sendError(403, "Access denied.");
             return;
         }

@@ -60,11 +60,11 @@ public class MessageServiceTest {
                 new UserEmail(user2.getEmail()),
                 new UserPassword(user2.getPassword()));
 
-        senderId = new UserId(userDTO1.getId());
-        recipientId = new UserId(userDTO2.getId());
+        senderId = new UserId(userDTO1.id);
+        recipientId = new UserId(userDTO2.id);
 
         AuthenticationService tokenService = context.getBean(AuthenticationService.class);
-        token = tokenService.login(new UserEmail(userDTO1.getEmail()), new UserPassword("pwd1"));
+        token = tokenService.login(new UserEmail(userDTO1.email), new UserPassword("pwd1"));
     }
 
     @Test

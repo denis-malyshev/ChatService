@@ -80,12 +80,12 @@ public class TestServlet extends HttpServlet {
 
         AuthenticationService tokenService = contextProvider.getContext().getBean(AuthenticationService.class);
 
-        Token token1 = tokenService.login(new UserEmail(userDTO1.getEmail()), new UserPassword("pwd"));
+        Token token1 = tokenService.login(new UserEmail(userDTO1.email), new UserPassword("pwd"));
 
-        UserId id1 = new UserId(userDTO1.getId());
-        UserId id2 = new UserId(userDTO2.getId());
+        UserId id1 = new UserId(userDTO1.id);
+        UserId id2 = new UserId(userDTO2.id);
 
-        chatRoomService.joinToChatRoom(token1, new UserId(userDTO1.getId()), new ChatRoomId(chatRoomDTO.getId()));
+        chatRoomService.joinToChatRoom(token1, new UserId(userDTO1.id), new ChatRoomId(chatRoomDTO.id));
 
         MessageService messageService = contextProvider.getContext().getBean(MessageService.class);
 

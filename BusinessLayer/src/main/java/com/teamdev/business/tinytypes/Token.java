@@ -2,13 +2,9 @@ package com.teamdev.business.tinytypes;
 
 public class Token  {
 
-    private String token;
+    public String key;
 
-    public Token(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
+    public Token(String key) {
+        this.key = key;
     }
 }

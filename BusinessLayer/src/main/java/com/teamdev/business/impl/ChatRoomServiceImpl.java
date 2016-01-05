@@ -46,15 +46,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                                ChatRoomId chatRoomId)
             throws AuthenticationException, UserNotFoundException, ChatRoomNotFoundException {
 
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
-        User user = userRepository.findById(userId.getId());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.id);
+        User user = userRepository.findById(userId.id);
 
         if (user == null) {
-            throw new UserNotFoundException("User with this id [" + userId.getId() + "] not exists.");
+            throw new UserNotFoundException("User with this id [" + userId.id + "] not exists.");
         }
 
         if (chatRoom == null) {
-            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.getId() + "] not exists.");
+            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.id + "] not exists.");
         }
 
         user.getChatRooms().add(chatRoom);
@@ -66,16 +66,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                               ChatRoomId chatRoomId)
             throws AuthenticationException, ChatRoomNotFoundException {
 
-        User user = userRepository.findById(userId.getId());
+        User user = userRepository.findById(userId.id);
 
         if (user == null) {
             return;
         }
 
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.getId());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId.id);
 
         if (chatRoom == null) {
-            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.getId() + "] not exists.");
+            throw new ChatRoomNotFoundException("ChatRoom with this id [" + chatRoomId.id + "] not exists.");
         }
 
         user.getChatRooms().remove(chatRoom);

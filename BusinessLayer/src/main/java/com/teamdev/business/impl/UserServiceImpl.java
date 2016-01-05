@@ -33,13 +33,13 @@ public class UserServiceImpl implements UserService {
 
     public UserDTO register(UserName name, UserEmail email, UserPassword password) throws AuthenticationException {
 
-        if (userRepository.userCount() > 0 && userRepository.findByMail(email.getEmail()) != null) {
+        if (userRepository.userCount() > 0 && userRepository.findByMail(email.email) != null) {
             throw new AuthenticationException("User with the same mail already exists.");
         }
 
-        String passwordHash = hashFunction.newHasher().putString(password.getPassword(), Charset.defaultCharset()).hash().toString();
+        String passwordHash = hashFunction.newHasher().putString(password.password, Charset.defaultCharset()).hash().toString();
 
-        User user = new User(name.getName(), email.getEmail(), passwordHash);
+        User user = new User(name.name, email.email, passwordHash);
         userRepository.update(user);
         return new UserDTO(user.getId(), user.getFirstName(), user.getEmail());
     }
@@ -47,17 +47,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(UserId userId) {
 
-        User user = userRepository.findById(userId.getId());
+        User user = userRepository.findById(userId.id);
 
         if (user == null)
             return null;
 
-        return new UserDTO(userId.getId(), user.getFirstName(), user.getEmail());
+        return new UserDTO(userId.id, user.getFirstName(), user.getEmail());
     }
 
     @Override
     public Set<ChatRoomDTO> findAvailableChats(UserId userId) {
-        Set<ChatRoom> chatRooms = userRepository.findById(userId.getId()).getChatRooms();
+        Set<ChatRoom> chatRooms = userRepository.findById(userId.id).getChatRooms();
         Set<ChatRoomDTO> chatRoomDTOs = new HashSet<>();
         for (ChatRoom chatRoom : chatRooms) {
             chatRoomDTOs.add(new ChatRoomDTO(chatRoom.getId(),chatRoom.getName(),chatRoom.getUsers().size(),chatRoom.getMessages().size()));

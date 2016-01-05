@@ -46,7 +46,7 @@ public class ChatRoomServiceTest {
         userRepository.update(user);
         userId = new UserId(user.getId());
 
-        AuthenticationToken authToken = new AuthenticationToken(userId.getId());
+        AuthenticationToken authToken = new AuthenticationToken(userId.id);
         tokenRepository.update(authToken);
         token = new Token(authToken.getKey());
 
@@ -78,7 +78,7 @@ public class ChatRoomServiceTest {
     public void testJoinUserToEmptyChat() throws Exception {
 
         chatRoomService.joinToChatRoom(token, userId, chatRoomId);
-        int result = chatRoomRepository.findById(chatRoomId.getId()).getUsers().size();
+        int result = chatRoomRepository.findById(chatRoomId.id).getUsers().size();
         assertEquals("The count of users must be 1", 1, result);
     }
 
@@ -97,10 +97,10 @@ public class ChatRoomServiceTest {
     @Test
     public void testDeleteUserFromChat() throws Exception {
 
-        chatRoomRepository.findById(chatRoomId.getId()).getUsers().add(user);
+        chatRoomRepository.findById(chatRoomId.id).getUsers().add(user);
 
         chatRoomService.leaveChatRoom(token, userId, chatRoomId);
-        boolean result = chatRoomRepository.findById(chatRoomId.getId()).getUsers().isEmpty();
+        boolean result = chatRoomRepository.findById(chatRoomId.id).getUsers().isEmpty();
         assertTrue("The count of users in chatRoom must be 0", result);
     }
 }

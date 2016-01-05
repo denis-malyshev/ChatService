@@ -31,9 +31,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     public Token login(UserEmail userEmail, UserPassword password) throws AuthenticationException {
 
-        User user = userRepository.findByMail(userEmail.getEmail());
+        User user = userRepository.findByMail(userEmail.email);
 
-        String passwordHash = hashFunction.newHasher().putString(password.getPassword(), Charset.defaultCharset()).hash().toString();
+        String passwordHash = hashFunction.newHasher().putString(password.password, Charset.defaultCharset()).hash().toString();
 
         if (user == null || !user.getPassword().equals(passwordHash)) {
             throw new AuthenticationException("Invalid login or password.");
