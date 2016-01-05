@@ -98,7 +98,7 @@ public class MessageServiceTest {
             messageService.sendMessage(token, senderId, new ChatRoomId(999L), "Hello, Masha!");
         } catch (AuthenticationException | UserNotFoundException | ChatRoomNotFoundException e) {
             String result = e.getMessage();
-            assertEquals("ChatRoom with this id [999] not exists.", result);
+            assertEquals("Exception message must be correct.", "ChatRoom with this id [999] not exists.", result);
         }
     }
 
@@ -109,7 +109,7 @@ public class MessageServiceTest {
             messageService.sendPrivateMessage(token, senderId, new UserId(999L), "Hello, Masha!");
         } catch (AuthenticationException | UserNotFoundException e) {
             String result = e.getMessage();
-            assertEquals("User with this id [999] not exists.", result);
+            assertEquals("Exception message must be correct.", "User with this id [999] not exists.", result);
         }
     }
 }

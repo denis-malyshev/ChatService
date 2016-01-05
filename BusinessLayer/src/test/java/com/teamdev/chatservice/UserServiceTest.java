@@ -63,7 +63,7 @@ public class UserServiceTest {
             fail();
         } catch (AuthenticationException e) {
             String result = e.getMessage();
-            assertEquals("", "User with the same mail already exists.", result);
+            assertEquals("Exception message must be correct.", "User with the same mail already exists.", result);
         }
     }
 
@@ -73,6 +73,6 @@ public class UserServiceTest {
         userRepository.update(user1);
 
         UserDTO userDTO = userService.findById(new UserId(user1.getId()));
-        assertNotNull("User must be exist.", userDTO);
+        assertNotNull("UserDTO must be exist.", userDTO);
     }
 }

@@ -44,7 +44,7 @@ public class AuthenticationServerTest {
         userRepository.update(new User("Vasya", "vasya@gmail.com", passwordHash));
 
         Token token = tokenService.login(new UserEmail("vasya@gmail.com"), new UserPassword("pwd"));
-        assertNotNull(token);
+        assertNotNull("Token must exists.", token);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AuthenticationServerTest {
             tokenService.login(new UserEmail("invalid@gmail.com"), new UserPassword("pwd"));
         } catch (AuthenticationException e) {
             String result = e.getMessage();
-            assertEquals("Invalid login or password.", result);
+            assertEquals("Exception message must be correct.", "Invalid login or password.", result);
         }
     }
 }

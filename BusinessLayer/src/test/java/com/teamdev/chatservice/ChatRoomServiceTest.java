@@ -59,7 +59,7 @@ public class ChatRoomServiceTest {
     public void testCreateChat() throws Exception {
 
         ChatRoomDTO chatRoomDTO = chatRoomService.create("chat");
-        assertNotNull(chatRoomDTO);
+        assertNotNull("ChatRoomDTO must exists.", chatRoomDTO);
     }
 
     @Test
@@ -70,16 +70,16 @@ public class ChatRoomServiceTest {
             fail();
         } catch (ChatRoomAlreadyExistsException e) {
             String result = e.getMessage();
-            assertEquals("ChatRoom with the same name already exists.", result);
+            assertEquals("Exception message must be correct.", "ChatRoom with the same name already exists.", result);
         }
     }
 
     @Test
-    public void testJoinUserToChat() throws Exception {
+    public void testJoinUserToEmptyChat() throws Exception {
 
         chatRoomService.joinToChatRoom(token, userId, chatRoomId);
-        boolean result = chatRoomRepository.findById(chatRoomId.getId()).getUsers().isEmpty();
-        assertFalse(result);
+        int result = chatRoomRepository.findById(chatRoomId.getId()).getUsers().size();
+        assertEquals("The count of users must be 1", 1, result);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ChatRoomServiceTest {
             fail();
         } catch (AuthenticationException | UserNotFoundException | ChatRoomNotFoundException e) {
             String result = e.getMessage();
-            assertEquals("ChatRoom with this id [34876] not exists.", result);
+            assertEquals("Exception message must be correct.", "ChatRoom with this id [34876] not exists.", result);
         }
     }
 
@@ -101,6 +101,6 @@ public class ChatRoomServiceTest {
 
         chatRoomService.leaveChatRoom(token, userId, chatRoomId);
         boolean result = chatRoomRepository.findById(chatRoomId.getId()).getUsers().isEmpty();
-        assertTrue(result);
+        assertTrue("The count of users in chatRoom must be 0", result);
     }
 }
