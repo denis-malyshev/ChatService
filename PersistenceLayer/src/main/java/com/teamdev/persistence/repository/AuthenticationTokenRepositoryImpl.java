@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRepository {
 
     private Map<Long, AuthenticationToken> tokens = new HashMap<>();
-    private long id = 1;
+    private AtomicLong id = new AtomicLong(1);
 
     public AuthenticationTokenRepositoryImpl() {
     }
@@ -32,7 +33,7 @@ public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRep
 
     public void update(AuthenticationToken token) {
         if (token.getId() == 0) {
-            token.setId(id++);
+            token.setId(id.getAndIncrement());
         }
         tokens.put(token.getId(), token);
     }

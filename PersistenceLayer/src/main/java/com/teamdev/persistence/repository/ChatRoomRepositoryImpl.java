@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
     private Map<Long, ChatRoom> chatRooms = new HashMap<>();
-    private long id = 1;
+    private AtomicLong id = new AtomicLong(1);
 
     public ChatRoomRepositoryImpl() {
     }
@@ -32,7 +33,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
     public void update(ChatRoom chatRoom) {
         if (chatRoom.getId() == 0) {
-            chatRoom.setId(id++);
+            chatRoom.setId(id.getAndIncrement());
         }
         chatRooms.put(chatRoom.getId(), chatRoom);
     }

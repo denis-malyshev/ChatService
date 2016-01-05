@@ -10,13 +10,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Repository
 public class MessageRepositoryImpl implements MessageRepository {
 
     private Map<Long, Message> messages = new HashMap<>();
-    private long id = 1;
+    private AtomicLong id = new AtomicLong(1);
 
     public Message findById(long id) {
         return messages.get(id);
@@ -28,7 +29,7 @@ public class MessageRepositoryImpl implements MessageRepository {
 
     public void update(Message message) {
         if (message.getId() == 0) {
-            message.setId(id++);
+            message.setId(id.getAndIncrement());
         }
         messages.put(message.getId(), message);
     }

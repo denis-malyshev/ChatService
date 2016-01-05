@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private Map<Long, User> users = new HashMap<>();
-    private long id = 1;
+    private AtomicLong id = new AtomicLong(1);
 
     public UserRepositoryImpl() {
     }
@@ -36,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void update(User user) {
         if (user.getId() == 0) {
-            user.setId(id++);
+            user.setId(id.getAndIncrement());
         }
         users.put(user.getId(), user);
     }
